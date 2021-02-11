@@ -1,0 +1,24 @@
+{
+  "name": "valentine-hunt",
+  "version": "1.0.0",
+  "description": "Application used to ask someone to be their valentine",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/msuratos/valentine-hunt.git"
+  },
+  "keywords": [
+    "hunt",
+    "react.js",
+    "node.js"
+  ],
+  "author": "Melvin Suratos",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/msuratos/valentine-hunt/issues"
+  },
+  "homepage": "https://github.com/msuratos/valentine-hunt#readme"
+}
