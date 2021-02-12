@@ -2,10 +2,10 @@
   "name": "valentine-hunt",
   "version": "1.0.0",
   "description": "Application used to ask someone to be their valentine",
-  "main": "src/server.js",
+  "main": "src/server/app.js",
   "scripts": {
     "start": "node src/server.js",
-    "debug": "nodemon --nolazy src/server.js"
+    "debug": "nodemon --nolazy src/server/app.js"
   },
   "repository": {
     "type": "git",
