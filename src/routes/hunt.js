@@ -6,11 +6,12 @@ const router = express.Router();
 router.get('/', (req, res) => {
     db.connect((err, client, done) => {
         if (err) {
-            console.log(`Error occured in GET /hunt: ${err.name}`, err.message);
+            console.log(err.stack);
 
             res.status(500);
-            res.statusMessage = err.message + '\n' + err.stack;
-            res.send(err.name);
+            res.statusMessage = `${err.name}: ${err.message}`;
+
+            return res.send(err.stack);
         }
 
         client.query("SELECT * FROM public.hunts", [], (err, result) => {
