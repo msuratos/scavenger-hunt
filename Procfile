@@ -1,2 +1,2 @@
-release: npm run build && npm run copy
+release: npm run copy
 web: npm start
