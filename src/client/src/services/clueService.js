@@ -4,7 +4,6 @@ async function getClues(huntid) {
     try {
         let response = await fetch(`${getApiUrl()}/api/v1/clue/${huntid}`);
         let clues = await response.json();
-        console.log(`Clues for hunt ${huntid}`, clues);
 
         return clues;
     }

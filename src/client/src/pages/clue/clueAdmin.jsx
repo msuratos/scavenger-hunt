@@ -1,5 +1,6 @@
-import { Component } from "react";
-import GetClues from "../../services/clueService";
+import { Component } from 'react';
+import GetClues from '../../services/clueService';
+import Clue from '../../components/clue';
 
 class ClueAdmin extends Component {
     state = {
@@ -16,7 +17,7 @@ class ClueAdmin extends Component {
             <div>
                 {
                     this.state.clues.map((value, index) => (
-                        <div key={value.cluesid}>{value.clues}</div>
+                        <Clue {...value} key={value.cluesid}></Clue>
                     ))
                 }
             </div>

@@ -25,7 +25,7 @@ router.get('/:huntid', (req, res) => {
         }
 
         const getCluesQuery = ` SELECT clues.cluesid, clues.clues, clues.createdby, clues.createddate,
-                                clues.fk_huntid, encode(clues.image::bytea, 'base64') as image,
+                                clues.fk_huntid, image,
                                 hunts.hunt FROM public.clues
                                 INNER JOIN public.hunts ON public.clues.fk_huntid = public.hunts.huntid
                                 WHERE hunts.huntid = '${huntid}'`;
