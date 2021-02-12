@@ -5,7 +5,7 @@ The purpose of this application is to create a way to ask someone to be their va
 - [x] Must have npm
 
 # Build
-1. `npm build --prod`
+1. `npm run build`
 
 # Run Locally
 1. `npm start`
