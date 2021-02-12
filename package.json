@@ -5,8 +5,7 @@
   "main": "src/server/app.js",
   "scripts": {
     "start": "node src/server/app.js",
-    "build": "cd src/client && npm i && npm run build",
-    "copy": "cp -r src/client/build src/server/build",
+    "build": "cd src/client && npm i && npm run build && cp -r src/client/build src/server/build",
     "debug": "nodemon --nolazy src/server/app.js"
   },
   "repository": {
