@@ -1,5 +1,7 @@
+import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
+
 import { Component } from 'react';
-import { getHuntService } from '../../services/huntService';
+import GetHunt from '../../services/huntService';
 
 class huntPage extends Component {
     state = {
@@ -8,7 +10,7 @@ class huntPage extends Component {
 
     async componentDidMount() {
         try {
-            this.setState({hunt: await getHuntService()});
+            this.setState({hunt: await GetHunt()});
 
             console.log('Hunt state', this.state.hunt);
         }
@@ -21,7 +23,9 @@ class huntPage extends Component {
         return (
             <div>
                 {
-                    this.state.hunt.map((value, index) => ( <div key={value.huntid}>{value.hunt}</div> ))
+                    this.state.hunt.map((value, index) => ( 
+                        <Link to={"/clue/admin/" + value.huntid}>{value.hunt}</Link> 
+                    ))
                 }
             </div>
         )

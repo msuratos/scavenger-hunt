@@ -13,4 +13,4 @@ async function getHunt() {
     }
 }
 
-export const getHuntService = getHunt;
+export default getHunt;
