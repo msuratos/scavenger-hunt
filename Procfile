@@ -1,2 +1,2 @@
-release: npm run copy
+worker: npm run copy
 web: npm start
