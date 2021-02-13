@@ -17,7 +17,7 @@ class cluePage extends Component {
 
     render() {
         return (
-            <Clue {...this.state.clue[0]} />
+            <Clue {...this.state.clue[0]} canSeeQR={false} />
         )
     }
 }
