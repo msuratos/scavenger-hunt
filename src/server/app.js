@@ -17,6 +17,10 @@ app.get('/', (req,res) => {
 
 app.use('/api/v1', rooteRoute);
 
+app.get('/*', (req, res) => {
+    res.sendFile(path + "index.html");
+})
+
 app.listen(port, () => {
     console.log(`Backend Api for Valentine Hunt is listening at ${port}`);
 });

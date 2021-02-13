@@ -1,10 +1,9 @@
 import getApiUrl from "../config/serviceConfig";
 
-async function getClues(huntid) {
+async function getCluesService(huntid) {
     try {
         let response = await fetch(`${getApiUrl()}/api/v1/clue/${huntid}`);
         let clues = await response.json();
-        console.log(`Clues for hunt ${huntid}`, clues);
 
         return clues;
     }
@@ -13,4 +12,17 @@ async function getClues(huntid) {
     }
 }
 
-export default getClues;
+async function getClueService(clueid) {
+    try {
+        let response = await fetch(`${getApiUrl()}/api/v1/clue/getclue/${clueid}`);
+        let clue = await response.json();
+
+        return clue;
+    }
+    catch (err) {
+        console.log(`Getting clue ${clueid} failed.`, err);
+    }
+}
+
+export const getClues = getCluesService;
+export const getClue = getClueService;

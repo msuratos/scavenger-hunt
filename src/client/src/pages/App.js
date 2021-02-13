@@ -3,7 +3,8 @@ import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import logo from '../logo.svg';
 import './App.css';
 import HuntPage from './hunt/huntPage';
-import ClueAdmin from './clue/clueAdmin';
+import ClueAdminPage from './clue/clueAdminPage';
+import CluePage from './clue/cluePage';
 
 function App() {
   return (
@@ -12,7 +13,8 @@ function App() {
         <img src={logo} className="App-logo" alt="logo" />
         <Switch>
           <Route exact path='/' component={HuntPage} />
-          <Route path='/clue/admin/:huntid' component={ClueAdmin} />
+          <Route path='/clue/admin/:huntid' component={ClueAdminPage} />
+          <Route path='/clue/:clueid' component={CluePage} />
         </Switch>
       </header>
     </div>
