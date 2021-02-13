@@ -8,7 +8,7 @@ class Clue extends Component {
             <div key={cluesid}>
                 <div>{clues}</div>
                 {
-                    image ? <img src={image} style={{width: '25%', height: 'auto'}} /> : <div></div>
+                    image ? <img src={image} style={{width: '75%', height: 'auto'}} /> : <div></div>
                 }
             </div>
         )

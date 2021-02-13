@@ -15,7 +15,9 @@ class ClueAdminPage extends Component {
             createdby: '',
             image: {},
             huntid: '',
-            newclues: ''
+            newclues: '',
+            success: '',
+            error: ''
         }
 
         this.handleClueChange = this.handleClueChange.bind(this);
@@ -30,16 +32,50 @@ class ClueAdminPage extends Component {
     }
 
     render() {
+        let success = (
+            <div className="alert alert-success alert-dismissible fade show" role="alert">
+                <strong>Success!</strong> {this.state.success}
+                <button type="button" className="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        );
+
+        let error = (
+            <div className="alert alert-danger alert-dismissible fade show" role="alert">
+                <strong>Holy guacamole!</strong> {this.state.error}
+                <button type="button" className="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        );
+
         return (
             <div>
-                <div>
-                    <form onSubmit={this.handleSubmit}>
-                        <label>Clue:<input type="text" value={this.state.newclues} onChange={this.handleClueChange} /></label>
-                        <label>Created By:<input type="text" value={this.state.createdby} onChange={this.handleCreatedByChange} /></label>
-                        <input type="file" onChange={this.onFileChange} title="Image" />
-                        <input type="submit" value="Submit" />
-                    </form>
-                </div>
+                { this.state.success !== '' ? success : <div></div> }
+                { this.state.error !== '' ? error : <div></div> }
+                <form onSubmit={this.handleSubmit} style={{width: '75%', margin: 'auto', textAlign: 'left'}}>
+                    <div className="form-group">
+                        <label htmlFor="clueinput">Clue</label>
+                        <input id="clueinput" className="form-control" placeholder="Clue for hunt"
+                            type="text" value={this.state.newclues} onChange={this.handleClueChange} />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="createdbyinput">Created By</label>
+                        <input id="createdbyinput" className="form-control" placeholder="Who are you?"
+                            type="text" value={this.state.createdby} onChange={this.handleCreatedByChange} />
+                    </div>
+                    <div className="input-group mb-3">
+                        <div className="custom-file">
+                            <input type="file" className="custom-file-input" id="inputGroupFile02" onChange={this.onFileChange} />
+                            <label className="custom-file-label" htmlFor="inputGroupFile02">Choose file</label>
+                        </div>
+                        <div className="input-group-append">
+                            <span className="input-group-text" id="">Upload</span>
+                        </div>
+                    </div>
+                    <input type="submit" className="btn btn-primary" value="Submit" />
+                </form>
                 {
                     this.state.clues.map((value, index) => (
                         <div key={value.cluesid}>
@@ -88,9 +124,12 @@ class ClueAdminPage extends Component {
             body: JSON.stringify(data)
         };
 		fetch(`${getApiUrl()}/api/v1/clue/${this.state.huntid}`, requestOptions).then(response => {
-            alert("File successfully uploaded");
+            if (!response.ok)
+                this.setState({error: 'Uploaded image failed 📷😥'});
+            else
+                this.setState({success: 'Uploaded image 📷😁'});
 		}).catch(err => {
-			alert(err);
+			this.setState({ error: err });
 		});
     }
 }
