@@ -36,12 +36,16 @@ router.get('/:huntid', (req, res) => {
 
                 res.status(500);
                 res.statusMessage = `${err.name}`;
+
+                client.release();
         
                 return res.send(`${err.stack}`);
-            }
+            } else {
+                client.release();
 
-            console.log (result.rows);
-            res.json(result.rows);
+                console.log (result.rows);
+                res.json(result.rows);
+            }
         });
     });
 });
@@ -100,5 +104,38 @@ router.post('/:huntid', (req, res) => {
         }
     });
 })
+
+router.get('/getclue/:clueid', (req, res) => {
+    db.connect(async (err, client, done) => {
+        if (err) {
+            console.log(err.stack);
+    
+            res.status(500);
+            res.statusMessage = `${err.name}: ${err.message}`;
+    
+            return res.send(err.stack);
+        }
+
+        const clueid = req.params.clueid;
+
+        client.query('select * from public.clues where cluesid = $1', [clueid], (err, result) => {
+            if (err) {
+                console.log(err.stack);
+
+                res.status(500);
+                res.statusMessage = `${err.name}`;
+
+                client.release();
+        
+                return res.send(`${err.stack}`);
+            } else {
+                client.release();
+
+                console.log (result.rows);
+                res.json(result.rows);
+            }
+        });
+    })
+});
 
 module.exports = router;

@@ -18,6 +18,8 @@ router.get('/', (req, res) => {
             console.log (result.rows);
             res.json(result.rows);
         });
+
+        client.release();
     });
 });
 
