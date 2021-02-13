@@ -18,7 +18,7 @@ app.get('/', (req,res) => {
 app.use('/api/v1', rooteRoute);
 
 app.get('/*', (req, res) => {
-    res.redirect('/');
+    res.sendFile(path + "index.html");
 })
 
 app.listen(port, () => {
