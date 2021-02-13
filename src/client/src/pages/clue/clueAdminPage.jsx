@@ -4,6 +4,7 @@ import QRCode from 'qrcode-react';
 import { getClues } from '../../services/clueService';
 import Clue from '../../components/clue';
 import GetQrUrl from '../../config/qrUrlConfig';
+import getApiUrl from '../../config/serviceConfig';
 
 class ClueAdminPage extends Component {
     constructor(props) {
@@ -86,10 +87,10 @@ class ClueAdminPage extends Component {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data)
         };
-		fetch(`http://localhost:3001/api/v1/clue/${this.state.huntid}`, requestOptions).then(response => {
-			this.setState({msg: "File successfully uploaded"});
+		fetch(`${getApiUrl()}/api/v1/clue/${this.state.huntid}`, requestOptions).then(response => {
+            alert("File successfully uploaded");
 		}).catch(err => {
-			this.setState({error: err});
+			alert(err);
 		});
     }
 }
