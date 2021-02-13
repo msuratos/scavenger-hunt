@@ -42,8 +42,6 @@ router.get('/:huntid', (req, res) => {
                 return res.send(`${err.stack}`);
             } else {
                 client.release();
-
-                console.log (result.rows);
                 res.json(result.rows);
             }
         });

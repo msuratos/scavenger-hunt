@@ -2,13 +2,13 @@ import { Component } from "react";
 
 class Clue extends Component {
     render() {
-        const { clues, cluesid, image, createdby } = this.props;
+        const { clues, cluesid, image, canSeeQR } = this.props;
 
         return (
             <div key={cluesid}>
                 <div>{clues}</div>
                 {
-                    image ? <img src={"data:image/jpeg;base64," + image} /> : <div></div>
+                    image ? <img src={image} style={{width: '25%', height: 'auto'}} /> : <div></div>
                 }
             </div>
         )
