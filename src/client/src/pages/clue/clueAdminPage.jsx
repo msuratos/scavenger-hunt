@@ -3,7 +3,7 @@ import QRCode from 'qrcode-react';
 
 import { getClues } from '../../services/clueService';
 import Clue from '../../components/clue';
-import GetApiUrl from '../../config/serviceConfig';
+import GetQrUrl from '../../config/qrUrlConfig';
 
 class ClueAdminPage extends Component {
     state = {
@@ -22,7 +22,7 @@ class ClueAdminPage extends Component {
                     this.state.clues.map((value, index) => (
                         <div key={value.cluesid}>
                             <Clue {...value}></Clue>
-                            <QRCode value={GetApiUrl() + "/clue/" + value.cluesid} size={290} level={"H"} includeMargin={true} />
+                            <QRCode value={GetQrUrl() + "/clue/" + value.cluesid} size={290} level={"H"} includeMargin={true} />
                         </div>
                     ))
                 }
