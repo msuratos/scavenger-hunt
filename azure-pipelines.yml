@@ -1,0 +1,49 @@
+# ASP.NET Core
+# Build and test ASP.NET Core projects targeting .NET Core.
+# Add steps that run tests, create a NuGet package, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
+
+trigger:
+- main
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  buildConfiguration: 'Release'
+
+jobs:
+- job: dotnet_build_deploy
+  displayName: Build & Deploy DotNet Web Api
+  pool:
+    vmImage: 'ubuntu-latest'
+  steps:
+  - task: DotNetCoreCLI@2
+    displayName: DotNet Restore
+    inputs:
+      command: 'restore'
+      projects: './backend/backend.csproj'
+      feedsToUse: 'select'
+  - task: DotNetCoreCLI@2
+    displayName: DotNet Build
+    inputs:
+      command: 'build'
+      projects: './backend/backend.csproj'
+      arguments: '--configuration $(buildConfiguration)'
+  - task: DotNetCoreCLI@2
+    displayName: DotNet Publish
+    inputs:
+      command: 'publish'
+      publishWebProjects: true
+      arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+      zipAfterPublish: true
+  - task: AzureRmWebAppDeployment@4
+    displayName: Azure Web App Deploy
+    inputs:
+      ConnectionType: 'AzureRM'
+      azureSubscription: 'Free Trial(b280efef-1f54-4ab4-9cd9-ed512f576405)'
+      appType: 'webAppLinux'
+      WebAppName: 'astro-blue-hunt'
+      packageForLinux: '$(Build.ArtifactStagingDirectory)/**/*.zip'
+      RuntimeStack: 'DOTNETCORE|5.0'
+      AppSettings: '-ConnectionStrings__HuntDbContext $(HuntDbContext)'
