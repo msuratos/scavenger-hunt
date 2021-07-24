@@ -1,23 +1,18 @@
-import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
-
-import logo from '../logo.svg';
+import { useHistory } from "react-router-dom";
+import { Button } from "ui-neumorphism";
 import './App.css';
-import HuntPage from './hunt/huntPage';
-import ClueAdminPage from './clue/clueAdminPage';
-import CluePage from './clue/cluePage';
 
-function App() {
+const App = () => {
+  const history = useHistory();
+  const onClick = () => {
+    history.push('/clue/FEA65DFE-77D2-4E62-70BD-08D94E706AC8');
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <Switch>
-          <Route exact path='/' component={HuntPage} />
-          <Route path='/clue/admin/:huntid' component={ClueAdminPage} />
-          <Route path='/clue/:clueid' component={CluePage} />
-        </Switch>
-      </header>
-    </div>
+    <>
+      <p>This is a scavanger hunt for the following hunt.</p>
+      <Button style={{width: '100%'}} color='var(--light-bg-light-shadow)' bgColor='var(--primary)' onClick={onClick}>Start</Button>
+    </>
   );
 }
 

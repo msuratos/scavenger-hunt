@@ -1,18 +1,14 @@
-import { Component } from "react";
+const Clue = (props) => {
+  const { clue, clueId, image } = props;
 
-class Clue extends Component {
-    render() {
-        const { clue, clueId, image, canSeeQR } = this.props;
-
-        return (
-            <div key={clueId}>
-                <div>{clue}</div>
-                {
-                    image ? <img src={image} style={{width: '75%', height: 'auto'}} /> : <div></div>
-                }
-            </div>
-        )
-    }
+  return (
+    <div key={clueId} style={{paddingTop: '.5rem', textAlign: 'center'}}>
+      <div>{clue}</div>
+      {
+        image ? <img src={image} style={{height: 'auto', padding: '.5rem .1rem', width: '75%'}} /> : <></>
+      }
+    </div>
+  );
 }
 
 export default Clue;

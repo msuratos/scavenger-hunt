@@ -6,6 +6,6 @@ namespace backend.Dtos
   {
     public string CreatedBy { get; set; }
     public string Clue { get; set; }
-    public string Image { get; set; }
+    public string? Image { get; set; }
   }
 }
