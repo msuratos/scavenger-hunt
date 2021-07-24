@@ -2,7 +2,7 @@ import getApiUrl from "../config/serviceConfig";
 
 async function getCluesService(huntid) {
     try {
-        let response = await fetch(`${getApiUrl()}/api/v1/clue/${huntid}`);
+        let response = await fetch(`/api/v1/clue/${huntid}`);
         let clues = await response.json();
 
         return clues;
@@ -14,7 +14,7 @@ async function getCluesService(huntid) {
 
 async function getClueService(clueid) {
     try {
-        let response = await fetch(`${getApiUrl()}/api/v1/clue/getclue/${clueid}`);
+        let response = await fetch(`api/v1/clue/getclue/${clueid}`);
         let clue = await response.json();
 
         return clue;

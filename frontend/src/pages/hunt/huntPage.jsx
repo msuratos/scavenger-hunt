@@ -25,7 +25,7 @@ class huntPage extends Component {
                 {
                     this.state.hunt.map((value, index) => ( 
                         <div key={value.huntid} className="alert alert-info" role="alert">
-                            <Link className="alert-link" to={"/clue/admin/" + value.huntid}>{value.hunt}</Link> 
+                            <Link className="alert-link" to={"/clue/admin/" + value.huntId}>{value.hunt}</Link> 
                         </div>
                     ))
                 }

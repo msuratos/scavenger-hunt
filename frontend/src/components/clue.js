@@ -2,11 +2,11 @@ import { Component } from "react";
 
 class Clue extends Component {
     render() {
-        const { clues, cluesid, image, canSeeQR } = this.props;
+        const { clue, clueId, image, canSeeQR } = this.props;
 
         return (
-            <div key={cluesid}>
-                <div>{clues}</div>
+            <div key={clueId}>
+                <div>{clue}</div>
                 {
                     image ? <img src={image} style={{width: '75%', height: 'auto'}} /> : <div></div>
                 }

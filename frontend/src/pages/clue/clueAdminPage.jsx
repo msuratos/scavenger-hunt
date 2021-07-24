@@ -78,9 +78,9 @@ class ClueAdminPage extends Component {
                 </form>
                 {
                     this.state.clues.map((value, index) => (
-                        <div key={value.cluesid}>
+                        <div key={value.clueId}>
                             <Clue {...value}></Clue>
-                            <QRCode value={GetQrUrl() + "/clue/" + value.cluesid} level={"H"} includeMargin={true} />
+                            <QRCode value={GetQrUrl() + "/clue/" + value.clueId} level={"H"} includeMargin={true} />
                         </div>
                     ))
                 }
@@ -113,7 +113,7 @@ class ClueAdminPage extends Component {
         let data = {};
 
         data.image = this.state.image;
-        data.clues = this.state.newclues;
+        data.clue = this.state.newclues;
         data.createdby = this.state.createdby;
 
         console.log(data);
@@ -123,7 +123,7 @@ class ClueAdminPage extends Component {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data)
         };
-		fetch(`${getApiUrl()}/api/v1/clue/${this.state.huntid}`, requestOptions).then(response => {
+		fetch(`/api/v1/clue/${this.state.huntid}`, requestOptions).then(response => {
             if (!response.ok)
                 this.setState({error: 'Uploaded image failed 📷😥'});
             else
