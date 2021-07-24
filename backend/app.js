@@ -23,5 +23,5 @@ app.get('/*', (req, res) => {
 })
 
 app.listen(port, () => {
-    console.log(`Backend Api for Valentine Hunt is listening at ${port}`);
+    console.log(`Backend Api for Scavenger Hunt is listening at ${port}`);
 });

@@ -1,5 +1,5 @@
 # Description
-The purpose of this application is to create a way to ask someone to be their valentine through the use of a 'Treasure Hunt'.
+The purpose of this application is to create a simple way to create and a play a scavenger hunt.
 
 # Prequisites
 - [x] Must have npm
