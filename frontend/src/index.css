@@ -92,3 +92,16 @@ label {
   top: 0;
   width: 100%;
 }
+
+.loading-override {
+  background-color: #c0c0c069;
+  border-radius: 1.5rem;
+  display: flex;
+  height: 100%;
+  left: 0;
+  place-content: center;
+  position: relative;
+  text-align: center;
+  top: 0;
+  width: 100%;
+}

@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Card, CardContent, Divider, TextField } from "ui-neumorphism";
-import QRCode from 'qrcode-react';
+import { Button, Divider, TextField } from "ui-neumorphism";
 
 import { getClues } from '../services/clueService';
-import Clue from '../components/clue';
-import GetQrUrl from '../config/qrUrlConfig';
+import CluesList from '../components/cluesList';
 
 const ClueAdminPage = (props) => {
     const [clues, setclues] = useState([]);
@@ -14,6 +12,7 @@ const ClueAdminPage = (props) => {
     const [newclues, setnewclues] = useState('');
     const [success, setsuccess] = useState('');
     const [error, seterror] = useState('');
+    const [loading, setloading] = useState(true);
 
     const { params } = props.match;
 
@@ -66,6 +65,7 @@ const ClueAdminPage = (props) => {
         const getCluesRequest = async () => {
             sethuntid(params.huntid);
             setclues(await getClues(params.huntid));
+            setloading(false);
         };
 
         getCluesRequest();
@@ -107,17 +107,7 @@ const ClueAdminPage = (props) => {
                 <Button type="submit" color='var(--light-bg-light-shadow)' bgColor='var(--primary)' style={{width: '100%'}}>Submit</Button>
             </form>
             <Divider />
-            {
-                clues.map((value) => (
-                    <Card key={value.clueId}>
-                        <CardContent style={{textAlign: 'center'}}>
-                            <Clue {...value}></Clue>
-                            <QRCode value={GetQrUrl() + "/clue/" + value.clueId} level={"H"} 
-                                includeMargin={true} />
-                        </CardContent>
-                    </Card>
-                ))
-            }
+            <CluesList clues={clues} loading={loading} />
         </div>
     );
 }
