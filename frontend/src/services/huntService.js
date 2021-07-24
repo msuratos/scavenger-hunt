@@ -1,5 +1,3 @@
-import getApiUrl from "../config/serviceConfig";
-
 async function getHunt() {
     try {
         let response = await fetch('api/v1/hunt');

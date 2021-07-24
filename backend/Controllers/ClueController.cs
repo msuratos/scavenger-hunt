@@ -37,7 +37,7 @@ namespace backend.Controllers
         Clue = clueDto.Clue,
         CreatedBy = clueDto.CreatedBy,
         FkHuntId = id,
-        Image = clueDto.Image
+        Image = clueDto.Image ?? string.Empty
       });
       await _context.SaveChangesAsync();
 
