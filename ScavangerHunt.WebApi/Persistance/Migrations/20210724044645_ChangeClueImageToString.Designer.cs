@@ -5,13 +5,13 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using backend.Persistance;
+using ScavengerHunt.WebApi.Persistance;
 
 namespace backend.Persistance.Migrations
 {
     [DbContext(typeof(HuntDbContext))]
-    [Migration("20210724033320_AddImageEntity")]
-    partial class AddImageEntity
+    [Migration("20210724044645_ChangeClueImageToString")]
+    partial class ChangeClueImageToString
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -41,10 +41,12 @@ namespace backend.Persistance.Migrations
                     b.Property<Guid?>("FkHuntId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<byte[]>("Image")
-                        .HasColumnType("varbinary(max)");
+                    b.Property<string>("Image")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ClueId");
+
+                    b.HasIndex("FkHuntId");
 
                     b.ToTable("Clues");
                 });
@@ -63,6 +65,20 @@ namespace backend.Persistance.Migrations
                     b.HasKey("HuntId");
 
                     b.ToTable("Hunts");
+                });
+
+            modelBuilder.Entity("backend.Persistance.Entities.Clues", b =>
+                {
+                    b.HasOne("backend.Persistance.Entities.Hunts", "Hunt")
+                        .WithMany("Clues")
+                        .HasForeignKey("FkHuntId");
+
+                    b.Navigation("Hunt");
+                });
+
+            modelBuilder.Entity("backend.Persistance.Entities.Hunts", b =>
+                {
+                    b.Navigation("Clues");
                 });
 #pragma warning restore 612, 618
         }

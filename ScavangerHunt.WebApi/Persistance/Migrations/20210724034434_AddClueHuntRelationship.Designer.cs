@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using backend.Persistance;
+using ScavengerHunt.WebApi.Persistance;
 
 namespace backend.Persistance.Migrations
 {
     [DbContext(typeof(HuntDbContext))]
-    partial class HuntDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210724034434_AddClueHuntRelationship")]
+    partial class AddClueHuntRelationship
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -39,8 +41,8 @@ namespace backend.Persistance.Migrations
                     b.Property<Guid?>("FkHuntId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Image")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<byte[]>("Image")
+                        .HasColumnType("varbinary(max)");
 
                     b.HasKey("ClueId");
 
