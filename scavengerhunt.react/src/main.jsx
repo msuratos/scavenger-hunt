@@ -7,7 +7,6 @@ import App from './pages/App';
 import ClueAdminPage from './pages/clueAdminPage';
 import CluePage from './pages/cluePage';
 import HuntPage from './pages/huntPage';
-import reportWebVitals from './reportWebVitals';
 
 import logo from './assets/images/astro-blue.png';
 import 'ui-neumorphism/dist/index.css';
@@ -15,7 +14,7 @@ import './index.css';
 
 const avatar = (<Avatar src={logo} style={{ width: 'auto' }} size={125} bgColor='var(--white)' className="avatar-custom" />);
 
-ReactDOM.render(
+ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <Router>
       <div style={{ display: 'flex', marginTop: '.5rem', placeContent: 'center' }}>
@@ -39,11 +38,5 @@ ReactDOM.render(
         </Card>
       </div>
     </Router>
-  </React.StrictMode>,
-  document.getElementById('root')
+  </React.StrictMode>
 );
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();

@@ -7,7 +7,7 @@
     <InvariantGlobalization>false</InvariantGlobalization>
     <SpaRoot>..\scavengerhunt.react\</SpaRoot>
 		<SpaProxyServerUrl>https://localhost:5173</SpaProxyServerUrl>
-    <SpaProxyLaunchCommand>npm start</SpaProxyLaunchCommand>
+    <SpaProxyLaunchCommand>npm run dev</SpaProxyLaunchCommand>
     <DefaultItemExcludes>$(DefaultItemExcludes);$(SpaRoot)node_modules\**</DefaultItemExcludes>
     <UserSecretsId>94530b53-1543-4e3d-aaf1-e3bcc7b9b687</UserSecretsId>
   </PropertyGroup>
