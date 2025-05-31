@@ -6,7 +6,7 @@ import { MantineProvider } from '@mantine/core';
 import App from './pages/App';
 // import ClueAdminPage from './pages/clueAdminPage';
 // import CluePage from './pages/cluePage';
-// import HuntPage from './pages/huntPage';
+import HuntPage from './pages/HuntPage';
 import { theme } from "./theme";
 
 import './index.css';
@@ -20,9 +20,9 @@ root.render(
       <Router>
         <Routes>
           <Route path='/' element={<App />} />
-          {/* <Route exact path='/hunt' component={HuntPage} />
-            <Route path='/clue/admin/:huntid' component={ClueAdminPage} />
-            <Route path='/clue/:clueid' component={CluePage} /> */}
+          <Route path='/hunt' element={<HuntPage />} />
+          {/* <Route path='/clue/admin/:huntid' element={<ClueAdminPage />} />
+          <Route path='/clue/:clueid' element={<CluePage />} /> */}
         </Routes>
       </Router>
     </MantineProvider>
