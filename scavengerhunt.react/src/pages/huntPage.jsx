@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Button } from "ui-neumorphism";
+import { useNavigate } from 'react-router';
+import { Button, Card, Center } from '@mantine/core';
 
 import GetHunt from '../services/huntService';
 
-const HuntPage = () => {
+export default function HuntPage() {
   const [hunts, setHunts] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const getHuntRequest = async () => {
@@ -15,24 +16,22 @@ const HuntPage = () => {
       catch (err) {
         console.log(err);
       }
-   };
-   
-   getHuntRequest();
+    };
+
+    getHuntRequest();
   }, []);
 
   return (
-    <div>
-    {
-      hunts.map((value) => ( 
-        <div key={value.huntId}>
-          <Button style={{width: '100%'}}>
-            <Link to={"/clue/admin/" + value.huntId}>{value.hunt}</Link> 
-          </Button>
-        </div>
-      ))
-    }
-    </div>
+    <Center maw='100vw' h='100vh'>
+      <Card withBorder padding="lg" radius="md" w={300} bg='var(--mantine-color-darkorange-1)'>
+        {
+          hunts.map((value) => (
+            <div key={value.huntId}>
+              <Button onClick={() => navigate("/clue/admin/" + value.huntId)} fullWidth>{value.hunt}</Button>
+            </div>
+          ))
+        }
+      </Card>
+    </Center>
   );
 }
-
-export default HuntPage;

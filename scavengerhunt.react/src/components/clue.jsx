@@ -1,4 +1,4 @@
-const Clue = (props) => {
+export default function Clue (props) {
   const { clue, clueId, image } = props;
 
   return (
@@ -10,5 +10,3 @@ const Clue = (props) => {
     </div>
   );
 }
-
-export default Clue;

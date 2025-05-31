@@ -1,15 +1,19 @@
 import { useEffect, useState } from 'react';
-import { getClue } from '../services/clueService';
-import Clue from '../components/clue';
-import Loading from '../components/loading';
+import { useParams } from 'react-router';
+import { Card, Center } from '@mantine/core';
 
-const CluePage = (props) => {
+import { getClue } from '../services/clueService';
+import Clue from '../components/Clue';
+import Loading from '../components/Loading';
+
+export default function CluePage() {
   const [clue, setClue] = useState({});
   const [loading, setLoading] = useState(true);
 
+  const params = useParams();
+
   useEffect(() => {
     const getClueApi = async () => {
-      const { params } = props.match;
       setClue(await getClue(params.clueid));
       setLoading(false);
     };
@@ -18,11 +22,11 @@ const CluePage = (props) => {
   }, []);
 
   return (
-    <>
-      { loading && <Loading /> }
-      { !loading && <Clue {...clue} /> }
-    </>
+    <Center maw='100vw' h='100vh'>
+      <Card withBorder padding="lg" radius="md" w={300} bg='var(--mantine-color-darkorange-1)'>
+        {loading && <Loading />}
+        {!loading && <Clue {...clue} />}
+      </Card>
+    </Center>
   )
 }
-
-export default CluePage;

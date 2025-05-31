@@ -1,11 +1,11 @@
-import { ProgressCircular } from "ui-neumorphism";
+import { Loader } from "@mantine/core";
 
 const Loading = (props) => {
   const { customStyles } = props;
 
   return (
     <div className={customStyles !== undefined ? 'loading-override' : 'loading'}>
-      <ProgressCircular style={customStyles ?? { position: 'absolute', top: '45%' }} indeterminate color='var(--info)' />
+      <Loader style={customStyles ?? { position: 'absolute', top: '45%' }} />
     </div>
   )
 };

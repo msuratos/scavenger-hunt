@@ -4,14 +4,14 @@ The purpose of this application is to create a simple way to create and a play a
 ## Technologies
 
 ### Backend
-- <span>ASP.NET</span> 5
+- <span>.NET</span> 8
 - <span>ASP.NET</span> Web Api
-- DotNet CLI
 - EF Core
 
 ### Frontend
-- React
-- NPM (Node Package Manager)
+- React 19
+- Mantine
+- React Router
 
 ## Backend
 
