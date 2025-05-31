@@ -1,38 +1,51 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
 // import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import { Card, Center, Group, Image, MantineProvider, RingProgress, Text } from '@mantine/core';
+import { 
+  Button, 
+  Card, 
+  Center, 
+  Image, 
+  MantineProvider, 
+  Text
+} from '@mantine/core';
 
 // import App from './pages/App';
 // import ClueAdminPage from './pages/clueAdminPage';
 // import CluePage from './pages/cluePage';
 // import HuntPage from './pages/huntPage';
+import { theme } from "./theme";
 
-import logo from './assets/images/astro-blue.png';
-import '@mantine/core/styles.css';
+import logo from './assets/images/main-logo.png';
 import './index.css';
-
-// const avatar = (<Avatar src={logo} style={{ width: 'auto' }} size={125} bgColor='var(--white)' className="avatar-custom" />);
+import '@mantine/core/styles.css';
 
 const root = createRoot(document.getElementById('root'));
 
 root.render(
   <React.StrictMode>
-    <MantineProvider>
+    <MantineProvider theme={theme}>
       {/* <Router> */}
-        <Center>
-          <Card className="card-custom">
-            <Card.Section>
-              <Image src={logo} alt="Dog" fit="contain" height={100} />
-            </Card.Section>
+      <Center maw='100vw' h='100vh'>
+        <Card withBorder padding="lg" radius="md" w={300} bg='var(--mantine-color-darkorange-1)'>
+          <Card.Section>
+            <Image src={logo} alt="Dog" fit="contain" height={100} mt={5} />
+          </Card.Section>
 
-            <Group>
-              <div className="title">
-                <label className="title-name">ASTRO BLUE</label>
-                <label className="title-desc">TURNS ONE!</label>
-              </div>
+          <Center>
+            <Text className='title' size="xl">SCAVENGER HUNT</Text>
+          </Center>
 
-              {/* <Divider dense />
+          <Center>
+            <Text className='title'>HUNTING TIME!</Text>
+          </Center>
+
+          <Card.Section p={5}>
+            <Button mb={5} fullWidth>Join Hunt</Button>
+            <Button mb={5} fullWidth>Create Hunt</Button>
+          </Card.Section>
+
+          {/* <Divider dense />
 
               <Router>
                 <Switch>
@@ -42,9 +55,8 @@ root.render(
                   <Route path='/clue/:clueid' component={CluePage} />
                 </Switch>
               </Router> */}
-            </Group>
-          </Card>
-        </Center>
+        </Card>
+      </Center>
       {/* </Router> */}
     </MantineProvider>
   </React.StrictMode>
