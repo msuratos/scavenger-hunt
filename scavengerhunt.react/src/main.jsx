@@ -14,6 +14,7 @@ import {
 // import ClueAdminPage from './pages/clueAdminPage';
 // import CluePage from './pages/cluePage';
 // import HuntPage from './pages/huntPage';
+import { theme } from "./theme";
 
 import logo from './assets/images/main-logo.png';
 import './index.css';
@@ -23,10 +24,10 @@ const root = createRoot(document.getElementById('root'));
 
 root.render(
   <React.StrictMode>
-    <MantineProvider>
+    <MantineProvider theme={theme}>
       {/* <Router> */}
       <Center maw='100vw' h='100vh'>
-        <Card withBorder padding="lg" radius="md" className='card' style={{ width: '300px' }}>
+        <Card withBorder padding="lg" radius="md" w={300} bg='var(--mantine-color-darkorange-1)'>
           <Card.Section>
             <Image src={logo} alt="Dog" fit="contain" height={100} mt={5} />
           </Card.Section>
