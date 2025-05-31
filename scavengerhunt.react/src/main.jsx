@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router';
 import { MantineProvider } from '@mantine/core';
 
 import App from './pages/App';
-// import ClueAdminPage from './pages/clueAdminPage';
+import ClueAdminPage from './pages/ClueAdminPage';
 // import CluePage from './pages/cluePage';
 import HuntPage from './pages/HuntPage';
 import { theme } from "./theme";
@@ -21,8 +21,8 @@ root.render(
         <Routes>
           <Route path='/' element={<App />} />
           <Route path='/hunt' element={<HuntPage />} />
-          {/* <Route path='/clue/admin/:huntid' element={<ClueAdminPage />} />
-          <Route path='/clue/:clueid' element={<CluePage />} /> */}
+          <Route path='/clue/admin/:huntid' element={<ClueAdminPage />} />
+          {/* <Route path='/clue/:clueid' element={<CluePage />} /> */}
         </Routes>
       </Router>
     </MantineProvider>

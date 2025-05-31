@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Divider, TextField } from "ui-neumorphism";
+import { useParams } from 'react-router';
+import { Button, Card, Center, Divider, Text } from "@mantine/core";
 
 import { getClues } from '../services/clueService';
-import CluesList from '../components/cluesList';
+import CluesList from '../components/CluesList';
 
-const ClueAdminPage = (props) => {
+export default function ClueAdminPage () {
     const [clues, setclues] = useState([]);
     const [createdby, setcreatedby] = useState('');
     const [image, setimage] = useState('');
@@ -14,7 +15,7 @@ const ClueAdminPage = (props) => {
     const [error, seterror] = useState('');
     const [loading, setloading] = useState(true);
 
-    const { params } = props.match;
+    const params = useParams();
 
     const handleClueChange = (e) => setnewclues(e.value);
     const handleCreatedByChange = (e) => setcreatedby(e.value);
@@ -90,26 +91,27 @@ const ClueAdminPage = (props) => {
     );
 
     return (
-        <div>
-            {success !== '' ? successcomponent : <></>}
-            {error !== '' ? errorcomponent : <></>}
-            <form onSubmit={handleSubmit} style={{ margin: 'auto', textAlign: 'left' }}>
-                <TextField style={{ margin: '0' }} value={newclues}
-                    onChange={handleClueChange} label="Clue for hunt" />
-                <TextField style={{ margin: '0'}} value={createdby} 
-                    onChange={handleCreatedByChange} label="Who are you?" />
-                <div className="input-group mb-3">
-                    <div className="custom-file">
-                        <input type="file" className="custom-file-input" id="inputGroupFile02" onChange={onFileChange} />
-                        <label className="custom-file-label" htmlFor="inputGroupFile02">Choose file</label>
+        <Center maw='100vw' h='100vh'>
+            <Card withBorder padding="lg" radius="md" w={300} bg='var(--mantine-color-darkorange-1)'>
+                {success !== '' ? successcomponent : <></>}
+                {error !== '' ? errorcomponent : <></>}
+
+                <form onSubmit={handleSubmit} style={{ margin: 'auto', textAlign: 'left' }}>
+                    <Text value={newclues} onChange={handleClueChange} label="Clue for hunt" />
+                    <Text value={createdby} onChange={handleCreatedByChange} label="Who are you?" />
+                    <div className="input-group mb-3">
+                        <div className="custom-file">
+                            <input type="file" className="custom-file-input" id="inputGroupFile02" onChange={onFileChange} />
+                            <label className="custom-file-label" htmlFor="inputGroupFile02">Choose file</label>
+                        </div>
                     </div>
-                </div>
-                <Button type="submit" color='var(--light-bg-light-shadow)' bgColor='var(--primary)' style={{width: '100%'}}>Submit</Button>
-            </form>
-            <Divider />
-            <CluesList clues={clues} loading={loading} />
-        </div>
+                    <Button type="submit" fullWidth>Submit</Button>
+                </form>
+
+                <Divider />
+
+                <CluesList clues={clues} loading={loading} />
+            </Card>
+        </Center>
     );
 }
-
-export default ClueAdminPage;
