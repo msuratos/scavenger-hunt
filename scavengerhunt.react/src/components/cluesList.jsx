@@ -1,9 +1,9 @@
 import { Card } from "@mantine/core";
 // import QRCode from 'qrcode-react';
 
-import Clue from './clue';
+import Clue from './Clue';
 // import GetQrUrl from '../config/qrUrlConfig';
-import Loading from "./loading";
+import Loading from "./Loading";
 
 const CluesList = (props) => {
   const { clues, loading } = props;
