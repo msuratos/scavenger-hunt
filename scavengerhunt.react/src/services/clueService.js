@@ -6,7 +6,8 @@ export const getClues = async (huntid) => {
         return clues;
     }
     catch (err) {
-        console.log(`Get clues for hunt ${huntid} failed`, err);
+        console.error(`Get clues for hunt ${huntid} failed`, err);
+        throw err;
     }
 };
 
@@ -18,6 +19,7 @@ export const getClue = async (clueid) => {
         return clue;
     }
     catch (err) {
-        console.log(`Getting clue ${clueid} failed.`, err);
+        console.error(`Getting clue ${clueid} failed.`, err);
+        throw err;
     }
 };
