@@ -14,7 +14,7 @@ export default function HuntPage() {
         setHunts(await GetHunt());
       }
       catch (err) {
-        console.log(err);
+        console.error(err);
       }
     };
 

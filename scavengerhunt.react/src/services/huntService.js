@@ -6,7 +6,8 @@ async function getHunt() {
         return hunts;
     }
     catch (err) {
-        console.log(`Get hunts failed`, err);
+        console.error(`Get hunts failed`, err);
+        throw err;
     }
 }
 

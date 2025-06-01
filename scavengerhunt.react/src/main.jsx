@@ -20,9 +20,10 @@ root.render(
       <Router>
         <Routes>
           <Route path='/' element={<App />} />
-          <Route path='/hunt' element={<HuntPage />} />
+          <Route path='/hunts' element={<HuntPage />} />
           <Route path='/clue/admin/:huntid' element={<ClueAdminPage />} />
           <Route path='/clue/:clueid' element={<CluePage />} />
+          <Route path="*" element={<><h1>Error</h1><p>Page Not Found!</p></>} />
         </Routes>
       </Router>
     </MantineProvider>
