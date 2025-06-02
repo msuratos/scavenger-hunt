@@ -8,9 +8,9 @@ namespace ScavengerHunt.WebApi.Persistance.Configurations
     {
         public void Configure(EntityTypeBuilder<Item> builder)
         {
-            builder.HasKey(key => key.ClueId);
+            builder.HasKey(key => key.ItemId);
 
-            builder.Property(prop => prop.ClueId).HasDefaultValueSql("NEWID()");
+            builder.Property(prop => prop.ItemId).HasDefaultValueSql("NEWID()");
             builder.Property(prop => prop.Name).IsRequired().IsUnicode().HasMaxLength(500);
             builder.Property(prop => prop.FkHuntId).IsRequired();
 

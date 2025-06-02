@@ -49,7 +49,7 @@ namespace ScavengerHunt.WebApi.Controllers
             _logger.LogInformation($"Getting clue: {clueId}");
             if (clueId == Guid.Empty) return NotFound();
 
-            return Ok(await _context.Items.SingleOrDefaultAsync(s => s.ClueId == clueId));
+            return Ok(await _context.Items.SingleOrDefaultAsync(s => s.ItemId == clueId));
         }
 
         [HttpGet]

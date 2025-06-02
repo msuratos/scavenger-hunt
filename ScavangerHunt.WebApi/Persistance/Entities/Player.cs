@@ -5,7 +5,8 @@
         public Guid PlayerId { get; set; }
         public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
         public string Name { get; set; } = string.Empty;
-        // NOTE: track status? how to track who won first?
+        public string Status { get; set; } = "Not Started"; // only 4 states: Not Started, In Progress, Completed, Pending
+        public DateTime StatusUpdatedAt { get; set; } = DateTime.UtcNow;
 
         public Guid FkHuntId { get; set; }
         public Hunt? Hunt { get; set; }

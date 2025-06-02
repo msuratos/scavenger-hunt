@@ -39,15 +39,18 @@ namespace ScavengerHunt.WebApi.Persistance.Migrations
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("GETDATE()");
 
-                    b.Property<DateTime>("EndDateTime")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("DATEADD(DAY, 1, GETDATE())");
+                    b.Property<DateTime?>("EndDateTime")
+                        .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("StartDateTime")
+                    b.Property<DateTime?>("StartDateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("GETDATE()");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
+                        .HasDefaultValue("Not Started");
 
                     b.Property<string>("SubTitle")
                         .IsRequired()
@@ -68,7 +71,7 @@ namespace ScavengerHunt.WebApi.Persistance.Migrations
 
             modelBuilder.Entity("ScavengerHunt.WebApi.Persistance.Entities.Item", b =>
                 {
-                    b.Property<Guid>("ClueId")
+                    b.Property<Guid>("ItemId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier")
                         .HasDefaultValueSql("NEWID()");
@@ -83,7 +86,7 @@ namespace ScavengerHunt.WebApi.Persistance.Migrations
                         .IsUnicode(true)
                         .HasColumnType("nvarchar(500)");
 
-                    b.HasKey("ClueId");
+                    b.HasKey("ItemId");
 
                     b.HasIndex("FkHuntId");
 
@@ -99,7 +102,7 @@ namespace ScavengerHunt.WebApi.Persistance.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2025, 6, 2, 1, 50, 27, 641, DateTimeKind.Utc).AddTicks(6543));
+                        .HasDefaultValueSql("GETDATE()");
 
                     b.Property<Guid>("FkHuntId")
                         .HasColumnType("uniqueidentifier");
@@ -108,6 +111,17 @@ namespace ScavengerHunt.WebApi.Persistance.Migrations
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(max)")
+                        .HasDefaultValue("Not Started");
+
+                    b.Property<DateTime>("StatusUpdatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETDATE()");
 
                     b.HasKey("PlayerId");
 
@@ -135,18 +149,12 @@ namespace ScavengerHunt.WebApi.Persistance.Migrations
                     b.Property<Guid>("FkPlayerId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("ItemClueId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("ItemGuess")
                         .IsRequired()
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
-                    b.Property<Guid?>("PlayerId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Status")
+                    b.Property<string>("ItemGuessStatus")
                         .IsRequired()
                         .ValueGeneratedOnAdd()
                         .HasMaxLength(20)
@@ -155,9 +163,9 @@ namespace ScavengerHunt.WebApi.Persistance.Migrations
 
                     b.HasKey("PlayerToItemId");
 
-                    b.HasIndex("ItemClueId");
+                    b.HasIndex("FkItemId");
 
-                    b.HasIndex("PlayerId");
+                    b.HasIndex("FkPlayerId");
 
                     b.ToTable("PlayerToItems");
                 });
@@ -188,11 +196,15 @@ namespace ScavengerHunt.WebApi.Persistance.Migrations
                 {
                     b.HasOne("ScavengerHunt.WebApi.Persistance.Entities.Item", "Item")
                         .WithMany("PlayerToItems")
-                        .HasForeignKey("ItemClueId");
+                        .HasForeignKey("FkItemId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
 
                     b.HasOne("ScavengerHunt.WebApi.Persistance.Entities.Player", "Player")
                         .WithMany("PlayerToItems")
-                        .HasForeignKey("PlayerId");
+                        .HasForeignKey("FkPlayerId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
 
                     b.Navigation("Item");
 

@@ -6,7 +6,7 @@
 
         public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
         public string ItemGuess { get; set; } = string.Empty;
-        public string Status { get; set;} = "Pending";  // should only be three states: Pending, Correct, Incorrect
+        public string ItemGuessStatus { get; set;} = "Pending";  // should only be three states: Pending, Correct, Incorrect
 
         public Guid FkItemId { get; set; }
         public Item? Item { get; set; }

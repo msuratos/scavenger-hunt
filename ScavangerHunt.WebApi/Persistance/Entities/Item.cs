@@ -2,7 +2,7 @@ namespace ScavengerHunt.WebApi.Persistance.Entities
 {
     public class Item
     {
-        public Guid ClueId { get; set; }
+        public Guid ItemId { get; set; }
         public string Name { get; set; } = string.Empty;
 
         public Guid? FkHuntId { get; set; }
