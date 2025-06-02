@@ -26,14 +26,14 @@ namespace ScavengerHunt.WebApi.Controllers
         public async Task<IActionResult> CreateHunt(HuntDto huntDto)
         {
             _logger.LogInformation($"Creating new hunt: {huntDto.Hunt}");
-            await _context.Hunts.AddAsync(new Hunts { Hunt = huntDto.Hunt });
+            await _context.Hunts.AddAsync(new Hunt { Title = huntDto.Hunt });
             await _context.SaveChangesAsync();
 
             return Created(nameof(HuntController), null);
         }
 
         [HttpGet]
-        public async Task<IList<Hunts>> GetHunts()
+        public async Task<IList<Hunt>> GetHunts()
         {
             _logger.LogInformation("Getting all the hunts");
             return await _context.Hunts.ToListAsync();

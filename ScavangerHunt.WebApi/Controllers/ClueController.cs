@@ -32,12 +32,10 @@ namespace ScavengerHunt.WebApi.Controllers
             if (id == null || id == Guid.Empty) return NotFound();
             if (!await _context.Hunts.AnyAsync(a => a.HuntId == id)) return NotFound();
 
-            await _context.Clues.AddAsync(new Clues
+            await _context.Items.AddAsync(new Item
             {
-                Clue = clueDto.Clue,
-                CreatedBy = clueDto.CreatedBy,
-                FkHuntId = id,
-                Image = clueDto.Image ?? string.Empty
+                Name = clueDto.Clue,
+                FkHuntId = id
             });
             await _context.SaveChangesAsync();
 
@@ -49,9 +47,9 @@ namespace ScavengerHunt.WebApi.Controllers
         public async Task<IActionResult> GetClue(Guid clueId)
         {
             _logger.LogInformation($"Getting clue: {clueId}");
-            if (clueId == null || clueId == Guid.Empty) return NotFound();
+            if (clueId == Guid.Empty) return NotFound();
 
-            return Ok(await _context.Clues.SingleOrDefaultAsync(s => s.ClueId == clueId));
+            return Ok(await _context.Items.SingleOrDefaultAsync(s => s.ItemId == clueId));
         }
 
         [HttpGet]
@@ -61,7 +59,7 @@ namespace ScavengerHunt.WebApi.Controllers
             _logger.LogInformation($"Getting clues for hunt: {huntId}");
             if (huntId == null || huntId == Guid.Empty) return NotFound();
 
-            return Ok(await _context.Clues.Where(w => w.FkHuntId == huntId).ToListAsync());
+            return Ok(await _context.Items.Where(w => w.FkHuntId == huntId).ToListAsync());
         }
     }
 }
