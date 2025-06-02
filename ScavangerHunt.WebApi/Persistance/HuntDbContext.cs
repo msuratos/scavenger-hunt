@@ -1,4 +1,3 @@
-using System;
 using Microsoft.EntityFrameworkCore;
 using ScavengerHunt.WebApi.Persistance.Configurations;
 using ScavengerHunt.WebApi.Persistance.Entities;
@@ -10,8 +9,10 @@ namespace ScavengerHunt.WebApi.Persistance
         public HuntDbContext() { }
         public HuntDbContext(DbContextOptions options) : base(options) { }
 
-        public virtual DbSet<Clues> Clues { get; set; }
-        public virtual DbSet<Hunts> Hunts { get; set; }
+        public virtual DbSet<Item> Items { get; set; }
+        public virtual DbSet<Hunt> Hunts { get; set; }
+        public virtual DbSet<Player> Players { get; set; }
+        public virtual DbSet<PlayerToItem> PlayerToItems { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder options)
         {
