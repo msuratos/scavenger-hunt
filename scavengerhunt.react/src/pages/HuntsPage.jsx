@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { Button, Card, Center, Text } from '@mantine/core';
-import { Plus } from 'tabler-icons-react';
+import { IconPlus } from '@tabler/icons-react';
 
 import GetHunt from '../services/huntService';
+import { useAlertDispatch } from '../utils/AlertContext';
 
 export default function HuntPage() {
   const [hunts, setHunts] = useState([]);
   const navigate = useNavigate();
+
+  const alertDispatch = useAlertDispatch();
 
   useEffect(() => {
     const getHuntRequest = async () => {
@@ -15,7 +18,8 @@ export default function HuntPage() {
         setHunts(await GetHunt());
       }
       catch (err) {
-        console.error(err);
+        console.error(`Get hunts failed`, err);
+        alertDispatch({ type: 'error', message: 'Failed to get hunts', show: true });
       }
     };
 
@@ -35,7 +39,7 @@ export default function HuntPage() {
           ))
         }
 
-        <Button leftSection={<Plus size={18} />} fullWidth>Create Hunt</Button>
+        <Button leftSection={<IconPlus size={18} />} fullWidth>Create Hunt</Button>
       </Card>
     </Center>
   );

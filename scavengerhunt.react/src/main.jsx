@@ -1,13 +1,16 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter as Router, Route, Routes } from 'react-router';
-import { MantineProvider } from '@mantine/core';
+import { Container, MantineProvider, Notification } from '@mantine/core';
+import { IconX, IconCheck } from '@tabler/icons-react';
 
 import App from './pages/App';
 import ClueAdminPage from './pages/ClueAdminPage';
 import CluePage from './pages/CluePage';
 import HuntsPage from './pages/HuntsPage';
-import { theme } from "./theme";
+import Alert from './components/Alert';
+import { AlertProvider } from "./utils/AlertContext";
+import { theme } from "./utils/theme";
 
 import './index.css';
 import '@mantine/core/styles.css';
@@ -17,15 +20,19 @@ const root = createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <MantineProvider theme={theme}>
-      <Router>
-        <Routes>
-          <Route path='/' element={<App />} />
-          <Route path='/hunts' element={<HuntsPage />} />
-          <Route path='/clue/admin/:huntid' element={<ClueAdminPage />} />
-          <Route path='/clue/:clueid' element={<CluePage />} />
-          <Route path="*" element={<><h1>Error</h1><p>Page Not Found!</p></>} />
-        </Routes>
-      </Router>
+      <AlertProvider>
+        <Alert />
+
+        <Router>
+          <Routes>
+            <Route path='/' element={<App />} />
+            <Route path='/hunts' element={<HuntsPage />} />
+            <Route path='/clue/admin/:huntid' element={<ClueAdminPage />} />
+            <Route path='/clue/:clueid' element={<CluePage />} />
+            <Route path="*" element={<><h1>Error</h1><p>Page Not Found!</p></>} />
+          </Routes>
+        </Router>
+      </AlertProvider>
     </MantineProvider>
   </React.StrictMode>
 );
