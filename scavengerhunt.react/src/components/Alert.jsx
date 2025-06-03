@@ -1,25 +1,41 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { Container, Notification } from '@mantine/core';
-import { IconX } from '@tabler/icons-react';
+import { IconInfoSquareRounded, IconCheck, IconX } from '@tabler/icons-react';
 
-import { useAlert } from '../utils/AlertContext';
+import { useAlert, useAlertDispatch } from '../utils/AlertContext';
 
 export default function Alert() {
   const alert = useAlert();
+  const alertDispatch = useAlertDispatch();
 
   const getColor = useMemo(() => {
     switch (alert.type) {
       case 'information': return 'blue';
       case 'error': return 'red';
+      case 'success': return 'teal';
       default: return 'black';
     }
   }, [alert.type]);
+
+  const getIcon = useMemo(() => {
+    switch (alert.type) {
+      case 'information': return <IconInfoSquareRounded size={20} />;
+      case 'error': return <IconX size={20} />;
+      case 'success': return <IconCheck size={20} />;
+      default: return <IconInfoSquareRounded size={20} />;
+    }
+  }, [alert.type]);
+
+  useEffect(() => {
+    if (alert.show) 
+      setTimeout(() => alertDispatch({ show: false }), 3000); // hide notfiation after 3 seconds
+  }, [alert.show]);
 
   return (
     <>
       {alert.show && (
         <Container fluid style={{ position: 'fixed', top: 0, left: 0, width: '100%' }}>
-          <Notification icon={<IconX size={20} />} color={getColor} title={alert.type}>
+          <Notification icon={getIcon} color={getColor} title={alert.type} onClose={() => alertDispatch({ show: false })}>
             {alert.message}
           </Notification>
         </Container>

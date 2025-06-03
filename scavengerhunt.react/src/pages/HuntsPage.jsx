@@ -16,6 +16,7 @@ export default function HuntPage() {
     const getHuntRequest = async () => {
       try {
         setHunts(await GetHunt());
+        alertDispatch({ type: 'success', message: 'Get hunts successful!', show: true });
       }
       catch (err) {
         console.error(`Get hunts failed`, err);
