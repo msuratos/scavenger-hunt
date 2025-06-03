@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
-import { Button, Card, Center, Text } from '@mantine/core';
+import { Button, Card, Center, Loader, Text } from '@mantine/core';
 import { IconPlus } from '@tabler/icons-react';
 
 import GetHunt from '../services/huntService';
@@ -8,6 +8,7 @@ import { useAlertDispatch } from '../utils/AlertContext';
 
 export default function HuntPage() {
   const [hunts, setHunts] = useState([]);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const alertDispatch = useAlertDispatch();
@@ -15,6 +16,7 @@ export default function HuntPage() {
   useEffect(() => {
     const getHuntRequest = async () => {
       try {
+        setLoading(true);
         setHunts(await GetHunt());
         alertDispatch({ type: 'success', message: 'Get hunts successful!', show: true });
       }
@@ -22,6 +24,8 @@ export default function HuntPage() {
         console.error(`Get hunts failed`, err);
         alertDispatch({ type: 'error', message: 'Failed to get hunts', show: true });
       }
+
+      setLoading(false);
     };
 
     getHuntRequest();
@@ -30,7 +34,9 @@ export default function HuntPage() {
   return (
     <Center maw='100vw' h='100vh'>
       <Card withBorder padding="lg" radius="md" w={300} bg='var(--mantine-color-darkorange-1)'>
-        {hunts.length === 0 && <Text size='md'>No hunts created</Text>}
+        {!loading && hunts.length === 0 && <Text size='md'>No hunts created</Text>}
+
+        {loading && <Center mb={5}><Loader /></Center>}
 
         {
           hunts.map((value) => (
