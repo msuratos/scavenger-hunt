@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
-import { Button, Card, Center, Loader, Text } from '@mantine/core';
+import { Button, Center, Loader, Text } from '@mantine/core';
 import { IconPlus } from '@tabler/icons-react';
 
 import GetHunt from '../services/huntService';
@@ -32,22 +32,20 @@ export default function HuntPage() {
   }, []);
 
   return (
-    <Center maw='100vw' h='100vh'>
-      <Card withBorder padding="lg" radius="md" w={300} bg='var(--mantine-color-darkorange-1)'>
-        {!loading && hunts.length === 0 && <Text size='md'>No hunts created</Text>}
+    <>
+      {!loading && hunts.length === 0 && <Text size='md'>No hunts created</Text>}
 
-        {loading && <Center mb={5}><Loader /></Center>}
+      {loading && <Center mb={5}><Loader /></Center>}
 
-        {
-          hunts.map((value) => (
-            <React.Fragment key={value.huntId}>
-              <Button onClick={() => navigate("/clue/admin/" + value.huntId)} fullWidth>{value.hunt}</Button>
-            </React.Fragment>
-          ))
-        }
+      {
+        hunts.map((value) => (
+          <React.Fragment key={value.huntId}>
+            <Button onClick={() => navigate("/clue/admin/" + value.huntId)} fullWidth>{value.hunt}</Button>
+          </React.Fragment>
+        ))
+      }
 
-        <Button leftSection={<IconPlus size={18} />} fullWidth>Create Hunt</Button>
-      </Card>
-    </Center>
+      <Button leftSection={<IconPlus size={18} />} fullWidth>Create Hunt</Button>
+    </>
   );
 }
