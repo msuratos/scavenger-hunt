@@ -23,7 +23,7 @@ const root = createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <MantineProvider theme={theme}>
-      <DatesProvider settings={{ locale: 'en', firstDayOfWeek: 0, weekendDays: [0] }}>
+      <DatesProvider settings={{ firstDayOfWeek: 0 }}>
         <AlertProvider>
           <Alert />
 
