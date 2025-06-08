@@ -2,10 +2,16 @@ import { useState } from 'react';
 import { Button, FileInput, Group, Stepper, TextInput } from '@mantine/core';
 import { DateTimePicker } from '@mantine/dates';
 import { useForm } from '@mantine/form';
+import dayjs from 'dayjs';
+
+import { createHunt } from '../services/huntService';
+import { useAlertDispatch } from '../utils/AlertContext';
 
 export default function EditHunt(props) {
   const { hunt } = props;
   const [active, setActive] = useState(0);
+
+  const alertDispatch = useAlertDispatch();
 
   const huntForm = useForm({
     mode: 'uncontrolled',
@@ -15,10 +21,16 @@ export default function EditHunt(props) {
       startDate: null,
       endDate: null
     },
+    transformValues: (values) => ({
+      title: values.title,
+      subtitle: values.subtitle,
+      startDate: values.startDate ? dayjs(values.startDate).toDate() : null,
+      endDate: values.startDate ? dayjs(values.endDate).toDate() : null
+    }),
     validate: {
       title: (value) => !value || value === '' ? 'Invalid title' : null,
-      startDate: (value) => !value || value === '' ? 'Invalid start date' : null,
-      endDate: (value) => !value || value === '' ? 'Invalid end date' : null,
+      startDate: (value) => !value || value === null ? 'Invalid start date' : null,
+      endDate: (value) => !value || value === null ? 'Invalid end date' : null,
     },
   });
 
@@ -27,11 +39,18 @@ export default function EditHunt(props) {
 
   const description = hunt === undefined ? 'Create Hunt' : 'Update Hunt';
 
+  async function onHuntFormSubmit(values) {
+    console.log(values);
+    await createHunt(values);
+    alertDispatch({ show: true, type: 'success', message: 'Successfully created hunt!' });
+    nextStep();
+  }
+
   return (
     <>
       <Stepper active={active} onStepClick={setActive} size='xs'>
         <Stepper.Step label="First step" description={description}>
-          <form onSubmit={huntForm.onSubmit((values) => { console.log(values); nextStep(); })}>
+          <form onSubmit={huntForm.onSubmit(onHuntFormSubmit)}>
             <TextInput label="Title" placeholder="Enter a text" key={huntForm.key('title')} {...huntForm.getInputProps('title')} withAsterisk />
             <TextInput label="Subtitle" placeholder="Enter a text (optional)" key={huntForm.key('subtitle')} {...huntForm.getInputProps('subtitle')} />
             <DateTimePicker label="Start Date" description="Pick a date and time" placeholder="MM/DD/YYYY" valueFormat={'MM/DD/YYYY HH:mm'} key={huntForm.key('startDate')} {...huntForm.getInputProps('startDate')} withAsterisk />
