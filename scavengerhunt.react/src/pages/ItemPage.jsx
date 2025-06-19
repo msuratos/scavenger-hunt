@@ -1,19 +1,19 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 
-import { getClue } from '../services/clueService';
-import Clue from '../components/Clue';
+import { getItem } from '../services/itemService';
+import Item from '../components/Item';
 import Loading from '../components/Loading';
 
-export default function CluePage() {
-  const [clue, setClue] = useState({});
+export default function ItemPage() {
+  const [item, setItem] = useState({});
   const [loading, setLoading] = useState(true);
 
   const params = useParams();
 
   useEffect(() => {
     const getClueApi = async () => {
-      setClue(await getClue(params.clueid));
+      setItem(await getItem(params.itemid));
       setLoading(false);
     };
 
@@ -23,7 +23,7 @@ export default function CluePage() {
   return (
     <>
       {loading && <Loading />}
-      {!loading && <Clue {...clue} />}
+      {!loading && <Item {...item} />}
     </>
   )
 }
