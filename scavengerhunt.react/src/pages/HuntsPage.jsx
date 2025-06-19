@@ -7,6 +7,7 @@ import { IconPlus } from '@tabler/icons-react';
 import EditHunt from '../components/EditHunt';
 import { createHunt, getHunt } from '../services/huntService';
 import { useAlertDispatch } from '../utils/AlertContext';
+import { createItem } from '../services/itemService';
 
 export default function HuntPage() {
   const [hunts, setHunts] = useState([]);
@@ -36,7 +37,13 @@ export default function HuntPage() {
 
   async function onEditHuntChange(values) {
     try {
-      await createHunt(values);
+      const hunt = await createHunt(values);
+
+      // create items for hunt
+      for (const item of values.items) {
+        await createItem(hunt.huntId, { name: item.name });
+      }
+
       alertDispatch({ type: 'success', message: 'Successfully created hunt!', show: true });
       setHunts(await getHunt());
     }
