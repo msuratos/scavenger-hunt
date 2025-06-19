@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
-import { Card, Center } from '@mantine/core';
 
 import { getClue } from '../services/clueService';
 import Clue from '../components/Clue';
@@ -22,11 +21,9 @@ export default function CluePage() {
   }, []);
 
   return (
-    <Center maw='100vw' h='100vh'>
-      <Card withBorder padding="lg" radius="md" w={300} bg='var(--mantine-color-darkorange-1)'>
-        {loading && <Loading />}
-        {!loading && <Clue {...clue} />}
-      </Card>
-    </Center>
+    <>
+      {loading && <Loading />}
+      {!loading && <Clue {...clue} />}
+    </>
   )
 }
