@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 
-import { getClue } from '../services/clueService';
+import { getItem } from '../services/itemService';
 import Clue from '../components/Clue';
 import Loading from '../components/Loading';
 
@@ -13,7 +13,7 @@ export default function CluePage() {
 
   useEffect(() => {
     const getClueApi = async () => {
-      setClue(await getClue(params.clueid));
+      setClue(await getItem(params.clueid));
       setLoading(false);
     };
 

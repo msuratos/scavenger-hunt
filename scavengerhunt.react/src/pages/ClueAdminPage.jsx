@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import { Button, Divider, Text } from "@mantine/core";
 
-import { getClues } from '../services/clueService';
+import { getItems } from '../services/itemService';
 import CluesList from '../components/CluesList';
 
 export default function ClueAdminPage() {
@@ -65,7 +65,7 @@ export default function ClueAdminPage() {
   useEffect(() => {
     const getCluesRequest = async () => {
       sethuntid(params.huntid);
-      setclues(await getClues(params.huntid));
+      setclues(await getItems(params.huntid));
       setloading(false);
     };
   
