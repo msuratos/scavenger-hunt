@@ -5,7 +5,7 @@ import { useDisclosure } from '@mantine/hooks';
 import { IconPlus } from '@tabler/icons-react';
 
 import EditHunt from '../components/EditHunt';
-import { getHunt } from '../services/huntService';
+import { createHunt, getHunt } from '../services/huntService';
 import { useAlertDispatch } from '../utils/AlertContext';
 
 export default function HuntPage() {
@@ -37,7 +37,7 @@ export default function HuntPage() {
   return (
     <>
       <Modal opened={opened} onClose={close} title="Create Hunt" centered>
-        <EditHunt />
+        <EditHunt onChange={async (values) => { await createHunt(values); close(); }} />
       </Modal>
 
       {!loading && hunts.length === 0 && <Text size='md'>No hunts created</Text>}
@@ -47,7 +47,7 @@ export default function HuntPage() {
       {
         hunts.map((value) => (
           <React.Fragment key={value.huntId}>
-            <Button onClick={() => navigate("/clue/admin/" + value.huntId)} fullWidth>{value.hunt}</Button>
+            <Button variant='subtle' onClick={() => navigate("/clue/admin/" + value.huntId)} fullWidth>{value.title}</Button>
           </React.Fragment>
         ))
       }
