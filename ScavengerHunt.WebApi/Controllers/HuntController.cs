@@ -1,8 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using ScavengerHunt.WebApi.Dtos;
 using ScavengerHunt.WebApi.Persistance;
 using ScavengerHunt.WebApi.Persistance.Entities;
@@ -32,7 +29,7 @@ namespace ScavengerHunt.WebApi.Controllers
             if (huntDto.EndDate == null) return BadRequest("Hunt end date is required.");
             if (huntDto.StartDate == null) return BadRequest("Hunt start date is required.");
 
-            await _context.Hunts.AddAsync(new Hunt { 
+            var hunt = await _context.Hunts.AddAsync(new Hunt { 
                 EndDateTime = huntDto.EndDate.HasValue ? huntDto.EndDate.Value.ToLocalTime() : huntDto.EndDate,
                 StartDateTime = huntDto.StartDate.HasValue ? huntDto.StartDate.Value.ToLocalTime() : huntDto.StartDate,
                 SubTitle = huntDto.Subtitle ?? string.Empty,    // TODO: change entity to accept nulls
@@ -42,6 +39,7 @@ namespace ScavengerHunt.WebApi.Controllers
             });
 
             await _context.SaveChangesAsync();
+            huntDto.HuntId = hunt.Entity.HuntId;
 
             return Created(nameof(HuntController), huntDto);
         }

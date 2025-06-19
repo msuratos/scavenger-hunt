@@ -20,21 +20,21 @@ namespace ScavengerHunt.WebApi.Controllers
         }
 
         [HttpPost]
-        [Route("{id}")]
-        public async Task<IActionResult> CreateItem(Guid? id, [FromBody] ItemDto itemDto)
+        [Route("{huntid:guid}")]
+        public async Task<IActionResult> CreateItem(Guid? huntId, [FromBody] ItemDto itemDto)
         {
-            _logger.LogInformation($"Creating item for hunt: {id}");
-            if (id == null || id == Guid.Empty) return NotFound();
-            if (!await _context.Hunts.AnyAsync(a => a.HuntId == id)) return NotFound();
+            _logger.LogInformation($"Creating item for hunt: {huntId}");
+            if (huntId == null || huntId == Guid.Empty) return NotFound();
+            if (!await _context.Hunts.AnyAsync(a => a.HuntId == huntId)) return NotFound();
 
             await _context.Items.AddAsync(new Item
             {
                 Name = itemDto.Name,
-                FkHuntId = id
+                FkHuntId = huntId
             });
             await _context.SaveChangesAsync();
 
-            return Created(nameof(ItemController), null);
+            return Created(nameof(ItemController), itemDto);
         }
 
         [HttpGet]
