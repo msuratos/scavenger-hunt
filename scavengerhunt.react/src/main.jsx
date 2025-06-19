@@ -6,8 +6,8 @@ import { DatesProvider } from '@mantine/dates';
 import 'dayjs/locale/en';
 
 import App from './pages/App';
-import ClueAdminPage from './pages/ClueAdminPage';
-import CluePage from './pages/CluePage';
+import ItemAdminPage from './pages/ItemAdminPage';
+import ItemPage from './pages/ItemPage';
 import HuntsPage from './pages/HuntsPage';
 import Alert from './components/Alert';
 import Layout from './components/Layout';
@@ -32,8 +32,8 @@ root.render(
               <Route element={<Layout />}>
                 <Route index element={<App />} />
                 <Route path='/hunts' element={<HuntsPage />} />
-                <Route path='/clue/admin/:huntid' element={<ClueAdminPage />} />
-                <Route path='/clue/:clueid' element={<CluePage />} />
+                <Route path='/item/admin/:huntid' element={<ItemAdminPage />} />
+                <Route path='/item/:itemid' element={<ItemPage />} />
                 <Route path="*" element={<><h1>Error</h1><p>Page Not Found!</p></>} />
               </Route>
             </Routes>

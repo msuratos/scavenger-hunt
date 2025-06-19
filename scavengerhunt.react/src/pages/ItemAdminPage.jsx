@@ -1,23 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
-import { Button, Divider, Text } from "@mantine/core";
+import { Button, Divider, FileInput, Text } from "@mantine/core";
+import { IconCamera } from '@tabler/icons-react';
 
 import { getItems } from '../services/itemService';
-import CluesList from '../components/CluesList';
+import ItemsList from '../components/ItemsList';
 
-export default function ClueAdminPage() {
-  const [clues, setclues] = useState([]);
+export default function ItemAdminPage() {
+  const [items, setItems] = useState([]);
   const [createdby, setcreatedby] = useState('');
   const [image, setimage] = useState('');
   const [huntid, sethuntid] = useState('');
-  const [newclues, setnewclues] = useState('');
+  const [newItems, setNewItems] = useState('');
   const [success, setsuccess] = useState('');
   const [error, seterror] = useState('');
   const [loading, setloading] = useState(true);
 
   const params = useParams();
 
-  const handleClueChange = (e) => setnewclues(e.value);
+  const handleItemChange = (e) => setNewItems(e.value);
   const handleCreatedByChange = (e) => setcreatedby(e.value);
 
   const onFileChange = async (event) => {
@@ -39,7 +40,7 @@ export default function ClueAdminPage() {
 
     let data = {
       image,
-      clue: newclues,
+      clue: newItems,
       createdby
     };
 
@@ -52,7 +53,7 @@ export default function ClueAdminPage() {
     };
 
     try {
-      const response = await fetch(`/api/v1/clue/${huntid}`, requestOptions);
+      const response = await fetch(`/api/v1/item/${huntid}`, requestOptions);
       if (!response.ok)
         seterror('Uploaded image failed 📷😥');
       else
@@ -63,16 +64,16 @@ export default function ClueAdminPage() {
   };
 
   useEffect(() => {
-    const getCluesRequest = async () => {
+    const getItemsRequest = async () => {
       sethuntid(params.huntid);
-      setclues(await getItems(params.huntid));
+      setItems(await getItems(params.huntid));
       setloading(false);
     };
   
-    getCluesRequest();
+    getItemsRequest();
   }, []);
 
-  let successcomponent = (
+  const SuccessComponent = (
     <div className="alert alert-success alert-dismissible fade show" role="alert">
       <strong>Success!</strong> {success}
       <button type="button" className="close" data-dismiss="alert" aria-label="Close">
@@ -81,7 +82,7 @@ export default function ClueAdminPage() {
     </div>
   );
 
-  let errorcomponent = (
+  const ErrorComponent = (
     <div className="alert alert-danger alert-dismissible fade show" role="alert">
       <strong>Holy guacamole!</strong> {error}
       <button type="button" className="close" data-dismiss="alert" aria-label="Close">
@@ -92,16 +93,15 @@ export default function ClueAdminPage() {
 
   return (
     <>
-      {success !== '' ? successcomponent : <></>}
-      {error !== '' ? errorcomponent : <></>}
+      {success !== '' ? SuccessComponent : <></>}
+      {error !== '' ? ErrorComponent : <></>}
   
-      <form onSubmit={handleSubmit} style={{ margin: 'auto', textAlign: 'left' }}>
-        <Text value={newclues} onChange={handleClueChange} label="Clue for hunt" />
+      <form onSubmit={handleSubmit}>
+        <Text value={newItems} onChange={handleItemChange} label="Clue for hunt" />
         <Text value={createdby} onChange={handleCreatedByChange} label="Who are you?" />
         <div className="input-group mb-3">
           <div className="custom-file">
-            <input type="file" className="custom-file-input" id="inputGroupFile02" onChange={onFileChange} />
-            <label className="custom-file-label" htmlFor="inputGroupFile02">Choose file</label>
+            <FileInput label="Item Picture" leftSection={<IconCamera />} clearable withAsterisk /> {/* TODO: connect to AI image service to convert to text */}
           </div>
         </div>
         <Button type="submit" fullWidth>Submit</Button>
@@ -109,7 +109,7 @@ export default function ClueAdminPage() {
 
       <Divider />
   
-      <CluesList clues={clues} loading={loading} />
+      <ItemsList items={items} loading={loading} />
     </>
   );
 }
