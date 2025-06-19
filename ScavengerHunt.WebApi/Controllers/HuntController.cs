@@ -50,7 +50,7 @@ namespace ScavengerHunt.WebApi.Controllers
         public async Task<IList<Hunt>> GetHunts()
         {
             _logger.LogInformation("Getting all the hunts");
-            return await _context.Hunts.ToListAsync();
+            return await _context.Hunts.OrderBy(o => o.CreatedDate).ToListAsync();
         }
     }
 }

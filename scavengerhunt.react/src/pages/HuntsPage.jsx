@@ -34,10 +34,24 @@ export default function HuntPage() {
     getHuntRequest();
   }, []);
 
+  async function onEditHuntChange(values) {
+    try {
+      await createHunt(values);
+      alertDispatch({ type: 'success', message: 'Successfully created hunt!', show: true });
+      setHunts(await getHunt());
+    }
+    catch (err) {
+      console.error(`Create hunt failed`, err);
+      alertDispatch({ type: 'error', message: 'Failed to create hunt', show: true });
+    }
+
+    close();
+  }
+
   return (
     <>
       <Modal opened={opened} onClose={close} title="Create Hunt" centered>
-        <EditHunt onChange={async (values) => { await createHunt(values); close(); }} />
+        <EditHunt onChange={onEditHuntChange} />
       </Modal>
 
       {!loading && hunts.length === 0 && <Text size='md'>No hunts created</Text>}
