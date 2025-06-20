@@ -6,6 +6,7 @@ import { DatesProvider } from '@mantine/dates';
 import 'dayjs/locale/en';
 
 import App from './pages/App';
+import HuntPage from "./pages/HuntPage";
 import HuntsPage from './pages/HuntsPage';
 import ItemAdminPage from './pages/ItemAdminPage';
 import ItemPage from './pages/ItemPage';
@@ -32,6 +33,7 @@ root.render(
             <Routes>
               <Route element={<Layout />}>
                 <Route index element={<App />} />
+                <Route path='/hunt/:huntid' element={<HuntPage />} />
                 <Route path='/hunt/join/:code?' element={<JoinHuntPage />} />
                 <Route path='/hunts' element={<HuntsPage />} />
                 <Route path='/item/admin/:huntid' element={<ItemAdminPage />} />

@@ -4,6 +4,7 @@ using ScavengerHunt.WebApi.Dtos;
 using ScavengerHunt.WebApi.Persistance;
 using ScavengerHunt.WebApi.Persistance.Entities;
 using ScavengerHunt.WebApi.Utils;
+using System.Text.Json;
 
 namespace ScavengerHunt.WebApi.Controllers
 {
@@ -61,6 +62,55 @@ namespace ScavengerHunt.WebApi.Controllers
         {
             _logger.LogInformation("Getting all the hunts");
             return await _context.Hunts.OrderBy(o => o.CreatedDate).ToListAsync();
+        }
+
+        [HttpPost("join")]
+        public async Task<IActionResult> JoinHunt([FromBody]JoinHuntDto joinHuntDto)
+        {
+            // validate request
+            if (string.IsNullOrEmpty(joinHuntDto.Code) || joinHuntDto.Code.Length != 4) return BadRequest("Invalid hunt code. It must be 4 characters long.");
+            if (string.IsNullOrEmpty(joinHuntDto.PlayerName)) return BadRequest("Player name is required.");
+
+            _logger.LogInformation($"Player {joinHuntDto.PlayerName} is trying to join hunt with code {joinHuntDto.Code}");
+
+            // check if hunt exists
+            var hunt = await _context.Hunts.FirstOrDefaultAsync(h => h.Code == joinHuntDto.Code && h.EndDateTime > DateTime.Now);
+            if (hunt == null)
+            {
+                _logger.LogWarning($"Hunt with code {joinHuntDto.Code} not found or has ended.");
+                return NotFound("Hunt not found or has ended.");
+            }
+
+            // check if player has already joined
+            var player = await _context.Players.FirstOrDefaultAsync(p => p.FkHuntId == hunt.HuntId && p.Name == joinHuntDto.PlayerName);
+            if (player != null)
+            {
+                _logger.LogWarning($"Player {joinHuntDto.PlayerName} has already joined the hunt with code {joinHuntDto.Code}.");
+                return BadRequest("You have already joined this hunt.");
+            }
+
+            // create new player
+            var newPlayer = new Player
+            {
+                Name = joinHuntDto.PlayerName,
+                FkHuntId = hunt.HuntId,
+                CreatedDate = DateTime.Now
+            };
+
+            await _context.Players.AddAsync(newPlayer);
+            await _context.SaveChangesAsync();
+
+            _logger.LogInformation($"Player {joinHuntDto.PlayerName} successfully joined the hunt with code {joinHuntDto.Code}.");
+
+            // set cookies
+            Response.Cookies.Append("player-id", newPlayer.PlayerId.ToString(), new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = true,
+                SameSite = SameSiteMode.Strict
+            });
+
+            return Ok(new { Message = "Successfully joined the hunt.", newPlayer.PlayerId, hunt.HuntId });
         }
     }
 }
