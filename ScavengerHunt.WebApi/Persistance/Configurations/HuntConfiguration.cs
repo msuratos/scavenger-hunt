@@ -11,6 +11,7 @@ namespace ScavengerHunt.WebApi.Persistance.Configurations
             builder.HasKey(key => key.HuntId);
 
             builder.Property(prop => prop.HuntId).HasDefaultValueSql("NEWID()");
+            builder.Property(prop => prop.Code).IsRequired().HasMaxLength(4); // unique code for the hunt, used for joining hunts
             builder.Property(prop => prop.CreatedBy).IsRequired().HasMaxLength(50);
             builder.Property(prop => prop.CreatedDate).IsRequired().HasDefaultValueSql("GETDATE()");
             builder.Property(prop => prop.SubTitle).IsRequired().IsUnicode().HasMaxLength(100);

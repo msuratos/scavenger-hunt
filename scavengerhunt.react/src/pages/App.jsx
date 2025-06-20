@@ -27,7 +27,7 @@ export default function App() {
       </Center>
 
       <Card.Section p={5}>
-        <Button mb={5} fullWidth>Join Hunt</Button>
+        <Button mb={5} onClick={() => navigate('/hunt/join')} fullWidth>Join Hunt</Button>
         <Button mb={5} onClick={() => navigate('/hunts')} fullWidth>Create Hunt</Button>
       </Card.Section>
     </>
