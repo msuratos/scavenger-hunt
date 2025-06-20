@@ -1,25 +1,38 @@
 import React from 'react';
-import { Button, TextInput } from '@mantine/core';
+import { Button, Card, Center, Image, TextInput, Title } from '@mantine/core';
 import { useNavigate, useParams } from 'react-router';
 import { useAlertDispatch } from '../utils/AlertContext';
-import { joinHunt } from '../services/huntService';
+import { getHunt, joinHunt } from '../services/huntService';
 
 export default function JoinHuntPage() {
   const [submitButtonLoading, setSubmitButtonLoading] = React.useState(false);
   const [code, setCode] = React.useState('');
   const [codeExists, setCodeExists] = React.useState(false);
+  const [hunt, setHunt] = React.useState({ title: '', subtitle: '' });
   const [playerName, setPlayerName] = React.useState('');
 
   const alertDispatch = useAlertDispatch();
-  const navigate  = useNavigate();
+  const navigate = useNavigate();
   const params = useParams();
 
   React.useEffect(() => {
+    async function getHuntDetails(code) {
+      try {
+        const hunt = await getHunt(undefined, code);
+        setHunt(hunt);
+      }
+      catch (err) {
+        console.error('Failed to get hunt details', err);
+        alertDispatch({ type: 'error', message: err.message, show: true });
+        navigate('/');
+      }
+    }
+
     if (params.code) {
       setCode(params.code);
       setCodeExists(params.code !== undefined && params.code !== '');
 
-      // TODO: get hunt details
+      getHuntDetails(params.code);
     }
   }, [params.code]);
 
@@ -28,9 +41,8 @@ export default function JoinHuntPage() {
     setSubmitButtonLoading(true);
 
     console.debug('Joining hunt', joinDetails);
-    
+
     try {
-      // TODO: call web api to join hunt with code and player details
       const hunt = await joinHunt(code, playerName.trim());
       navigate(`/hunt/${hunt.huntId}`);
     }
@@ -39,7 +51,6 @@ export default function JoinHuntPage() {
       alertDispatch({ type: 'error', message: 'Failed to join hunt', show: true });
       setSubmitButtonLoading(false);
     }
-
   }
 
   return (
@@ -53,7 +64,17 @@ export default function JoinHuntPage() {
 
       {codeExists && (
         <>
-          {/* TODO: show hunt details in the Card.Header */}
+          <Card.Section>
+            <Image alt={hunt.title} />
+          </Card.Section>
+
+          <Center>
+            <Title order={3}>{hunt.title}</Title>
+          </Center>
+          <Center>
+            <Title order={4}>{hunt.subtitle}</Title>
+          </Center>
+
           <TextInput label="Player Name" placeholder="Enter name" value={playerName} onChange={e => setPlayerName(e.currentTarget.value)} withAsterisk />
           <Button disabled={playerName.trim() === ''} loading={submitButtonLoading} onClick={onSubmitClick}>Submit</Button>
         </>

@@ -58,6 +58,64 @@ namespace ScavengerHunt.WebApi.Controllers
         }
 
         [HttpGet]
+        public async Task<IActionResult> GetHunt(Guid? huntId, string? code)
+        {
+            // validate request
+            if (huntId == null && string.IsNullOrEmpty(code)) return BadRequest("Either huntId or code must be provided.");
+            _logger.LogInformation($"Getting hunt with huntId: {huntId}, code: {code}");
+
+            // find hunt by huntId or code
+            HuntDto? huntDto = null;
+            if (huntId.HasValue)
+            {
+                var hunt = await _context.Hunts.FirstOrDefaultAsync(h => h.HuntId == huntId.Value);
+                if (hunt != null && hunt.EndDateTime > DateTime.Now)
+                {
+                    huntDto = new HuntDto
+                    {
+                        HuntId = hunt.HuntId,
+                        Title = hunt.Title,
+                        Subtitle = hunt.SubTitle,
+                        StartDate = hunt.StartDateTime,
+                        EndDate = hunt.EndDateTime
+                    };
+                }
+            }
+            else if (!string.IsNullOrEmpty(code))
+            {
+                var hunt2 = await _context.Hunts.FirstOrDefaultAsync(h => h.Code == code && h.EndDateTime > DateTime.Now);
+                if (hunt2 != null)
+                {
+                    huntDto = new HuntDto
+                    {
+                        HuntId = hunt2.HuntId,
+                        Title = hunt2.Title,
+                        Subtitle = hunt2.SubTitle,
+                        StartDate = hunt2.StartDateTime,
+                        EndDate = hunt2.EndDateTime
+                    };
+                }
+            }
+
+            // check if hunt was found
+            if (huntDto == null)
+            {
+                _logger.LogWarning($"Hunt not found with huntId: {huntId}, code: {code}");
+                return NotFound("Hunt not found.");
+            }
+
+            // check cookie, if player-id, exists, redirect
+            var playerId = Request.Cookies.SingleOrDefault(s => s.Key == "player-id");
+            if (!string.IsNullOrEmpty(playerId.Value))
+            {
+                return Redirect($"/hunt/{huntDto.HuntId}");
+            }
+
+            _logger.LogInformation($"Hunt found: {JsonSerializer.Serialize(huntDto)}");
+            return Ok(huntDto);
+        }
+
+        [HttpGet("all")]
         public async Task<IList<Hunt>> GetHunts()
         {
             _logger.LogInformation("Getting all the hunts");
@@ -107,7 +165,8 @@ namespace ScavengerHunt.WebApi.Controllers
             {
                 HttpOnly = true,
                 Secure = true,
-                SameSite = SameSiteMode.Strict
+                SameSite = SameSiteMode.Strict,
+                Expires = hunt.EndDateTime
             });
 
             return Ok(new { Message = "Successfully joined the hunt.", newPlayer.PlayerId, hunt.HuntId });

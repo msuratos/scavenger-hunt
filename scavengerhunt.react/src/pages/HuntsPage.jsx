@@ -5,7 +5,7 @@ import { useDisclosure } from '@mantine/hooks';
 import { IconPlus } from '@tabler/icons-react';
 
 import EditHunt from '../components/EditHunt';
-import { createHunt, getHunt } from '../services/huntService';
+import { createHunt, getHunts } from '../services/huntService';
 import { useAlertDispatch } from '../utils/AlertContext';
 import { createItem } from '../services/itemService';
 
@@ -21,7 +21,7 @@ export default function HuntPage() {
     const getHuntRequest = async () => {
       try {
         setLoading(true);
-        setHunts(await getHunt());
+        setHunts(await getHunts());
         alertDispatch({ type: 'success', message: 'Get hunts successful!', show: true });
       }
       catch (err) {
@@ -45,7 +45,7 @@ export default function HuntPage() {
       }
 
       alertDispatch({ type: 'success', message: 'Successfully created hunt!', show: true });
-      setHunts(await getHunt());
+      setHunts(await getHunts());
     }
     catch (err) {
       console.error(`Create hunt failed`, err);

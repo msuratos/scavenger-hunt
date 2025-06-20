@@ -10,9 +10,34 @@ export async function createHunt(values) {
   }
 }
 
-export async function getHunt() {
+export async function getHunt(huntId, code) {
   try {
-    const response = await fetch('api/v1/hunt');
+    let urlPath = '/api/v1/hunt';
+
+    if (huntId) urlPath += `?huntId=${huntId}`;
+    else if (code) urlPath += `?code=${code}`;
+
+    const response = await fetch(urlPath);
+    if (response.redirected) {
+      window.location = response.url;
+      return;
+    }
+    else if (!response.ok) {
+      throw Error(await response.text());
+    }
+
+    const hunt = await response.json();
+    return hunt;
+  }
+  catch (err) {
+    console.error('Geting hunt details failed', err);
+    throw err;
+  }
+}
+
+export async function getHunts() {
+  try {
+    const response = await fetch('api/v1/hunt/all');
     const hunts = await response.json();
     return hunts;
   }
