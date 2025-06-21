@@ -1,15 +1,17 @@
 import React from 'react';
-import { Title } from '@mantine/core';
-import { useParams } from 'react-router';
+import { Center, Title } from '@mantine/core';
+import { useNavigate, useParams } from 'react-router';
 
 import { useAlertDispatch } from '../utils/AlertContext';
 import { getHunt } from '../services/huntService';
+import { isPlayerValid } from '../services/playerService';
 
 export default function HuntPage() {
   const [hunt, setHunt] = React.useState();
 
-  const params = useParams();
   const alertDispatch = useAlertDispatch();
+  const navigate = useNavigate();
+  const params = useParams();
 
   // TODO: verify player
   React.useEffect(() => {
@@ -24,13 +26,34 @@ export default function HuntPage() {
       }
     }
 
+    async function getPlayerDetails() {
+      try {
+        const isValid = await isPlayerValid();
+        if (!isValid) throw new Error('You are not a valid player. Please join again');
+      }
+      catch (err) {
+        console.error('Not a valid player', err);
+        navigate('/hunt/join');
+        alertDispatch({ type: 'error', message: err.message, show: true });
+      }
+    }
+
     getHuntDetails();
+    getPlayerDetails();
   }, []);
 
   return (
     <>
       {hunt?.status === 'Not Started' && (
-        <Title order={1}>{hunt.title} has not started</Title>
+        <>
+          <Center>
+            <Title order={1}>{hunt.title}</Title>
+          </Center>
+
+          <Center>
+            <Title order={2}>Not Started</Title>
+          </Center>
+        </>
       )}
 
       {hunt?.status === 'Started' && (
