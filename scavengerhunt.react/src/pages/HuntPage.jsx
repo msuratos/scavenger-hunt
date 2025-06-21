@@ -5,6 +5,7 @@ import { useNavigate, useParams } from 'react-router';
 import { useAlertDispatch } from '../utils/AlertContext';
 import { getHunt } from '../services/huntService';
 import { isPlayerValid } from '../services/playerService';
+import StartedHunt from '../components/StartedHunt';
 
 export default function HuntPage() {
   const [hunt, setHunt] = React.useState();
@@ -13,7 +14,6 @@ export default function HuntPage() {
   const navigate = useNavigate();
   const params = useParams();
 
-  // TODO: verify player
   React.useEffect(() => {
     async function getHuntDetails() {
       try {
@@ -56,9 +56,7 @@ export default function HuntPage() {
         </>
       )}
 
-      {hunt?.status === 'Started' && (
-        <Title order={1}>{hunt.title} has started</Title>
-      )}
+      {hunt?.status === 'Started' && <StartedHunt hunt={hunt} />}
     </>
   );
 }
