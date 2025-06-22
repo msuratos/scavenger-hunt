@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ScavengerHunt.WebApi.Dtos;
 using ScavengerHunt.WebApi.Persistance;
-using System.Threading.Tasks;
 
 namespace ScavengerHunt.WebApi.Controllers
 {
@@ -20,8 +19,8 @@ namespace ScavengerHunt.WebApi.Controllers
             _dbContext = context;
         }
 
-        [HttpGet("item")]
-        public async Task<IActionResult> GetItemForPlayer(Guid huntId)
+        [HttpGet("items")]
+        public async Task<IActionResult> GetItemsStatusForPlayer(Guid huntId)
         {
             _logger.LogDebug("Getting item for player");
 
@@ -35,19 +34,27 @@ namespace ScavengerHunt.WebApi.Controllers
             if (player == null) return BadRequest("Player can't be found");
 
             // get items by sort
-            ItemDto? itemDto = null;
+            IList<PlayerItemStatusDto> playerItems = new List<PlayerItemStatusDto>();
             var items = await _dbContext.Items.Where(w => w.FkHuntId == huntId).ToListAsync();
             foreach (var item in items)
             {
-                // if player already has submitted an item, get the next item
-                if (player.PlayerToItems.Any(a => a.FkItemId == item.ItemId)) continue;
-                itemDto = new ItemDto { ItemId = item.ItemId, Name = item.Name };
+                var playerItem = new PlayerItemStatusDto
+                {
+                    ItemId = item.ItemId,
+                    Name = item.Name
+                };
+
+                // check if player has this item
+                var playerToItem = player.PlayerToItems.SingleOrDefault(s => s.FkItemId == item.ItemId);
+                if (playerToItem != null)
+                    playerItem.Status = playerToItem.ItemGuessStatus; // "Not Started", "In Progress", "Completed"
+                else
+                    playerItem.Status = "Not Started"; // default status if not found
+
+                playerItems.Add(playerItem);
             }
 
-            // if itemDto is null, then that means they finished
-            if (itemDto == null) return Ok();
-
-            return Ok(itemDto);
+            return Ok(playerItems);
         }
 
         [HttpGet("details")]

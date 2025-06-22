@@ -1,6 +1,6 @@
-export async function getItemForPlayer(huntId) {
+export async function getItemsForPlayer(huntId) {
   try {
-    const response = await fetch(`/api/v1/player/item?huntId=${huntId}`);
+    const response = await fetch(`/api/v1/player/items?huntId=${huntId}`);
     if (!response.ok) {
       throw new Error('Failed to fetch item for player');
     }

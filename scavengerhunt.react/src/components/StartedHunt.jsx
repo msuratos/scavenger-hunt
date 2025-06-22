@@ -1,37 +1,35 @@
 import React from 'react';
-import { AppShell, Center, FileInput, Loader, Stack, Text, Title } from '@mantine/core';
-import { IconCamera } from '@tabler/icons-react';
+import { AppShell, Center, FileInput, Grid, List, Loader, Stack, Text, ThemeIcon, Title } from '@mantine/core';
+import { IconCamera, IconCircleCheck, IconCircleDashed, IconHelpCircle } from '@tabler/icons-react';
 import { useNavigate } from 'react-router';
 
-import { getItemForPlayer, getPlayer } from '../services/playerService';
+import { getItemsForPlayer, getPlayer } from '../services/playerService';
 import { useAlertDispatch } from '../utils/AlertContext';
 
 export default function StartedHunt(props) {
   const { hunt } = props;
 
-  const [item, setItem] = React.useState(null);
+  const [items, setItems] = React.useState([]);
   const [playerName, setPlayerName] = React.useState('');
 
   const alertDispatch = useAlertDispatch();
   const navigate = useNavigate();
 
-  async function getItem() {
-    try {
-      const item = await getItemForPlayer(hunt.huntId);
-      if (item) {
-        setItem(item);
-        alertDispatch({ type: 'information', message: `You have received: ${item.name}`, show: true });
-      } else {
-        alertDispatch({ type: 'warning', message: 'No item available for you at the moment.', show: true });
+  React.useEffect(() => {
+    async function getItemsForHunt() {
+      try {
+        const items = await getItemsForPlayer(hunt.huntId);
+        if (items) {
+          setItems(items);
+        } else {
+          alertDispatch({ type: 'warning', message: 'No items available for you at the moment.', show: true });
+        }
+      } catch (err) {
+        console.error('Failed to get items for player', err);
+        alertDispatch({ type: 'error', message: err.message, show: true });
       }
     }
-    catch (err) {
-      console.error('Failed to get item for player', err);
-      alertDispatch({ type: 'error', message: err.message, show: true });
-    }
-  }
 
-  React.useEffect(() => {
     async function getPlayerDetails() {
       try {
         const playerDetails = await getPlayer(hunt.huntId);
@@ -44,24 +42,52 @@ export default function StartedHunt(props) {
     }
 
     getPlayerDetails();
-    getItem();
+    getItemsForHunt();
   }, []);
+
+  function getItemStatusIcon(status) {
+    switch (status) {
+      case 'Not Started':
+        return (
+          <ThemeIcon color="blue" size={24} radius="xl">
+            <IconCircleDashed size={16} />
+          </ThemeIcon>
+        );
+      case 'Correct':
+        return (
+          <ThemeIcon color="teal" size={24} radius="xl">
+            <IconCircleCheck size={16} />
+        </ThemeIcon>
+        );
+      default:
+        return (
+          <ThemeIcon color="red" size={24} radius="xl">
+            <IconHelpCircle size={16} />
+          </ThemeIcon>
+        );
+    }
+  }
 
   return (
     <>
       <AppShell>
         <AppShell.Header bg='beige.1'>
-          <Center>
-            <Text c='forest' fw={500}>{playerName}</Text>
-          </Center>
+          <Grid p={5}>
+            <Grid.Col span={6}>
+              <Text c='forest' fw={500}>{hunt.title}</Text>
+            </Grid.Col>
+            <Grid.Col span={6} style={{ textAlign: 'right' }}>
+              <Text c='forest' fw={500}>{playerName}</Text>
+            </Grid.Col>
+          </Grid>
         </AppShell.Header>
       </AppShell>
 
       <Center>
-        {item == null
+        {items.length === 0
           ? (
             <Stack>
-              <Text c='forest'>Getting your next item...</Text>
+              <Text c='forest'>Getting items...</Text>
 
               <Center>
                 <Loader />
@@ -69,25 +95,13 @@ export default function StartedHunt(props) {
             </Stack>
           )
           : (
-            <Stack>
-              <Center>
-                <Title order={1} c='forest'>{item.name}</Title>
-              </Center>
-              
-              <FileInput
-                placeholder='Upload an image of the item'
-                description='Image of the item'
-                accept='image/*'
-                leftSection={<IconCamera />}
-                onChange={(file) => {
-                  if (file) {
-                    alertDispatch({ type: 'success', message: 'Image uploaded successfully!', show: true });
-                  } else {
-                    alertDispatch({ type: 'warning', message: 'No image selected.', show: true });
-                  }
-                }}
-              />
-            </Stack>
+            <List spacing="xs" size="sm" center>
+              {items.map((item) => (
+                <List.Item key={item.itemId} icon={getItemStatusIcon(item.status)}>
+                  <Text c='forest' fw={500} td={item.status === 'Correct' ? 'line-through' : undefined}>{item.name}</Text>
+                </List.Item>
+              ))}
+            </List>
           )
         }
       </Center>
