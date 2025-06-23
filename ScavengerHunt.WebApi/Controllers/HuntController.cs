@@ -77,7 +77,8 @@ namespace ScavengerHunt.WebApi.Controllers
                         Title = hunt.Title,
                         Subtitle = hunt.SubTitle,
                         StartDate = hunt.StartDateTime,
-                        EndDate = hunt.EndDateTime
+                        EndDate = hunt.EndDateTime,
+                        Status = hunt.Status
                     };
                 }
             }
@@ -92,7 +93,8 @@ namespace ScavengerHunt.WebApi.Controllers
                         Title = hunt2.Title,
                         Subtitle = hunt2.SubTitle,
                         StartDate = hunt2.StartDateTime,
-                        EndDate = hunt2.EndDateTime
+                        EndDate = hunt2.EndDateTime,
+                        Status = hunt2.Status
                     };
                 }
             }
@@ -102,13 +104,6 @@ namespace ScavengerHunt.WebApi.Controllers
             {
                 _logger.LogWarning($"Hunt not found with huntId: {huntId}, code: {code}");
                 return NotFound("Hunt not found.");
-            }
-
-            // check cookie, if player-id, exists, redirect
-            var playerId = Request.Cookies.SingleOrDefault(s => s.Key == "player-id");
-            if (!string.IsNullOrEmpty(playerId.Value))
-            {
-                return Redirect($"/hunt/{huntDto.HuntId}");
             }
 
             _logger.LogInformation($"Hunt found: {JsonSerializer.Serialize(huntDto)}");

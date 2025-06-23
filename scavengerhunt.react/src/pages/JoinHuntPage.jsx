@@ -1,24 +1,33 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button, Card, Center, Image, TextInput, Title } from '@mantine/core';
 import { useNavigate, useParams } from 'react-router';
 import { useAlertDispatch } from '../utils/AlertContext';
 import { getHunt, joinHunt } from '../services/huntService';
+import { isPlayerValid } from '../services/playerService';
 
 export default function JoinHuntPage() {
-  const [submitButtonLoading, setSubmitButtonLoading] = React.useState(false);
   const [code, setCode] = React.useState('');
   const [codeExists, setCodeExists] = React.useState(false);
   const [hunt, setHunt] = React.useState({ title: '', subtitle: '' });
   const [playerName, setPlayerName] = React.useState('');
+  const [submitButtonLoading, setSubmitButtonLoading] = React.useState(false);
 
   const alertDispatch = useAlertDispatch();
   const navigate = useNavigate();
   const params = useParams();
 
   React.useEffect(() => {
-    async function getHuntDetails(code) {
+    async function getDetails(code) {
       try {
-        const hunt = await getHunt(undefined, code);
+        const huntPromise = getHunt(undefined, code);
+        const isPlayerValidPromise = isPlayerValid();
+
+        await Promise.all([huntPromise, isPlayerValidPromise]);
+
+        const hunt = await huntPromise;
+        const isValid = await isPlayerValidPromise;
+        if (isValid) navigate(`/hunt/${hunt.huntId}`);
+
         setHunt(hunt);
       }
       catch (err) {
@@ -31,8 +40,7 @@ export default function JoinHuntPage() {
     if (params.code) {
       setCode(params.code);
       setCodeExists(params.code !== undefined && params.code !== '');
-
-      getHuntDetails(params.code);
+      getDetails(params.code);
     }
   }, [params.code]);
 

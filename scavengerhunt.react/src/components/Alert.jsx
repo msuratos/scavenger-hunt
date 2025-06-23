@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo } from 'react';
 import { Container, Notification } from '@mantine/core';
-import { IconInfoSquareRounded, IconCheck, IconX } from '@tabler/icons-react';
+import { IconAlertSquareRounded, IconInfoSquareRounded, IconCheck, IconX } from '@tabler/icons-react';
 
 import { useAlert, useAlertDispatch } from '../utils/AlertContext';
 
@@ -13,6 +13,7 @@ export default function Alert() {
       case 'information': return 'blue';
       case 'error': return 'red';
       case 'success': return 'teal';
+      case 'warning': return 'yellow';
       default: return 'black';
     }
   }, [alert.type]);
@@ -22,6 +23,7 @@ export default function Alert() {
       case 'information': return <IconInfoSquareRounded size={20} />;
       case 'error': return <IconX size={20} />;
       case 'success': return <IconCheck size={20} />;
+      case 'warning': return <IconAlertSquareRounded size={20} />;
       default: return <IconInfoSquareRounded size={20} />;
     }
   }, [alert.type]);
@@ -34,7 +36,7 @@ export default function Alert() {
   return (
     <>
       {alert.show && (
-        <Container fluid style={{ position: 'fixed', top: 0, left: 0, width: '100%' }}>
+        <Container fluid style={{ position: 'fixed', top: 25, left: 0, width: '100%' }}>
           <Notification icon={getIcon} color={getColor} title={alert.type} onClose={() => alertDispatch({ show: false })}>
             {alert.message}
           </Notification>
