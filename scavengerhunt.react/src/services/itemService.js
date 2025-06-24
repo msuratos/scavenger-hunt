@@ -1,11 +1,8 @@
-export async function createItem(huntid, item) {
+export async function createItem(huntid, formData) {
     try {
         const response = await fetch(`/api/v1/item/${huntid}`, {
             method: 'POST',
-            body: JSON.stringify(item),
-            headers: {
-                'Content-Type': 'application/json'
-            }
+            body: formData
         });
 
         if (!response.ok) throw Error('HTTP response failure for creating item for hunt');

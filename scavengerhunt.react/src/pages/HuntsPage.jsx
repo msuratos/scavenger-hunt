@@ -41,7 +41,11 @@ export default function HuntPage() {
 
       // create items for hunt
       for (const item of values.items) {
-        await createItem(hunt.huntId, { name: item.name });
+        const formData = new FormData();
+        formData.append('name', item.name);
+        formData.append('file', item.picture);
+
+        await createItem(hunt.huntId, formData);
       }
 
       alertDispatch({ type: 'success', message: 'Successfully created hunt!', show: true });

@@ -4,6 +4,7 @@ namespace ScavengerHunt.WebApi.Persistance.Entities
     {
         public Guid ItemId { get; set; }
         public string Name { get; set; } = string.Empty;
+        public byte[]? Image { get; set; }
 
         public Guid? FkHuntId { get; set; }
         public Hunt? Hunt { get; set; }
