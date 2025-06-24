@@ -7,6 +7,7 @@ import 'dayjs/locale/en';
 
 import App from './pages/App';
 import HuntPage from "./pages/HuntPage";
+import PlayerLayout from './components/PlayerLayout';
 import HuntsPage from './pages/HuntsPage';
 import ItemAdminPage from './pages/ItemAdminPage';
 import ItemPage from './pages/ItemPage';
@@ -37,8 +38,12 @@ root.render(
               <Route element={<Layout />}>
                 <Route index element={<App />} />
                 <Route path='hunt'>
-                  <Route path=':huntid' element={<HuntPage />} />
-                  <Route path=':huntid/item/:itemid' element={<PlayerItemPage />} />
+                  <Route path=":huntid" element={<PlayerLayout />}>
+                    <Route index element={<HuntPage />} />
+                    <Route path="item/:itemid" element={<PlayerItemPage />} />
+                  </Route>
+                  {/* <Route path=':huntid' element={<HuntPage />} />
+                  <Route path=':huntid/item/:itemid' element={<PlayerItemPage />} /> */}
                   <Route path='join/:code?' element={<JoinHuntPage />} />
                 </Route>
                 <Route path='/hunts' element={<HuntsPage />} />
@@ -48,7 +53,7 @@ root.render(
               </Route>
             </Routes>
           </Router>
-        </AlertProvider>      
+        </AlertProvider>
       </DatesProvider>
     </MantineProvider>
   </React.StrictMode>

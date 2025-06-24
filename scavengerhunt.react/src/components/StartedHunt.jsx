@@ -1,16 +1,15 @@
 import React from 'react';
-import { AppShell, Center, FileInput, Grid, List, Loader, Stack, Text, ThemeIcon, Title } from '@mantine/core';
-import { IconCamera, IconCircleCheck, IconCircleDashed, IconHelpCircle } from '@tabler/icons-react';
+import { Center, List, Loader, Stack, Text, ThemeIcon } from '@mantine/core';
+import { IconCircleCheck, IconCircleDashed, IconHelpCircle } from '@tabler/icons-react';
 import { useNavigate } from 'react-router';
 
-import { getItemsForPlayer, getPlayer } from '../services/playerService';
+import { getItemsForPlayer } from '../services/playerService';
 import { useAlertDispatch } from '../utils/AlertContext';
 
 export default function StartedHunt(props) {
   const { hunt } = props;
 
   const [items, setItems] = React.useState([]);
-  const [playerName, setPlayerName] = React.useState('');
 
   const alertDispatch = useAlertDispatch();
   const navigate = useNavigate();
@@ -29,19 +28,7 @@ export default function StartedHunt(props) {
         alertDispatch({ type: 'error', message: err.message, show: true });
       }
     }
-
-    async function getPlayerDetails() {
-      try {
-        const playerDetails = await getPlayer(hunt.huntId);
-        setPlayerName(playerDetails.name);
-      } catch (err) {
-        console.error('Not a valid player', err);
-        navigate('/hunt/join');
-        alertDispatch({ type: 'error', message: err.message, show: true });
-      }
-    }
-
-    getPlayerDetails();
+    
     getItemsForHunt();
   }, []);
 
@@ -70,25 +57,11 @@ export default function StartedHunt(props) {
 
   return (
     <>
-      <AppShell>
-        <AppShell.Header bg='beige.1'>
-          <Grid p={5}>
-            <Grid.Col span={6}>
-              <Text c='forest' fw={500}>{hunt.title}</Text>
-            </Grid.Col>
-            <Grid.Col span={6} style={{ textAlign: 'right' }}>
-              <Text c='forest' fw={500}>{playerName}</Text>
-            </Grid.Col>
-          </Grid>
-        </AppShell.Header>
-      </AppShell>
-
       <Center>
         {items.length === 0
           ? (
             <Stack>
               <Text c='forest'>Getting items...</Text>
-
               <Center>
                 <Loader />
               </Center>
