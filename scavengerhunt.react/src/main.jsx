@@ -11,8 +11,11 @@ import HuntsPage from './pages/HuntsPage';
 import ItemAdminPage from './pages/ItemAdminPage';
 import ItemPage from './pages/ItemPage';
 import JoinHuntPage from "./pages/JoinHuntPage";
+import PlayerItemPage from "./pages/PlayerItemPage";
+
 import Alert from './components/Alert';
 import Layout from './components/Layout';
+
 import { AlertProvider } from "./utils/AlertContext";
 import { theme } from "./utils/theme";
 
@@ -33,8 +36,11 @@ root.render(
             <Routes>
               <Route element={<Layout />}>
                 <Route index element={<App />} />
-                <Route path='/hunt/:huntid' element={<HuntPage />} />
-                <Route path='/hunt/join/:code?' element={<JoinHuntPage />} />
+                <Route path='hunt'>
+                  <Route path=':huntid' element={<HuntPage />} />
+                  <Route path=':huntid/item/:itemid' element={<PlayerItemPage />} />
+                  <Route path='join/:code?' element={<JoinHuntPage />} />
+                </Route>
                 <Route path='/hunts' element={<HuntsPage />} />
                 <Route path='/item/admin/:huntid' element={<ItemAdminPage />} />
                 <Route path='/item/:itemid' element={<ItemPage />} />

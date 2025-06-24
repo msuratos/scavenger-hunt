@@ -97,7 +97,7 @@ export default function StartedHunt(props) {
           : (
             <List spacing="xs" size="sm" center>
               {items.map((item) => (
-                <List.Item key={item.itemId} icon={getItemStatusIcon(item.status)}>
+                <List.Item key={item.itemId} icon={getItemStatusIcon(item.status)} onClick={() => navigate(`item/${item.itemId}?name=${item.name}`)}>
                   <Text c='forest' fw={500} td={item.status === 'Correct' ? 'line-through' : undefined}>{item.name}</Text>
                 </List.Item>
               ))}
