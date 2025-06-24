@@ -36,3 +36,26 @@ export async function isPlayerValid() {
     return false;
   }
 }
+
+export async function uploadItemPicture(file, huntId, itemId) {
+  const formData = new FormData();
+  formData.append('file', file);
+  formData.append('itemId', itemId);
+
+  try {
+    const response = await fetch(`/api/v1/player/item?huntId=${huntId}`, {
+      method: 'POST',
+      body: formData,
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to upload item picture');
+    }
+
+    return true;
+  }
+  catch (err) {
+    console.error('Failed to upload item picture', err);
+    throw err;
+  }
+}

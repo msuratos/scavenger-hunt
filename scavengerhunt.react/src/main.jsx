@@ -42,8 +42,6 @@ root.render(
                     <Route index element={<HuntPage />} />
                     <Route path="item/:itemid" element={<PlayerItemPage />} />
                   </Route>
-                  {/* <Route path=':huntid' element={<HuntPage />} />
-                  <Route path=':huntid/item/:itemid' element={<PlayerItemPage />} /> */}
                   <Route path='join/:code?' element={<JoinHuntPage />} />
                 </Route>
                 <Route path='/hunts' element={<HuntsPage />} />

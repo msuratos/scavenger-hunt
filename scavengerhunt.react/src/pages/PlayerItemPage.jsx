@@ -3,10 +3,14 @@ import { useParams, useSearchParams, useNavigate } from 'react-router';
 import { Center, FileInput, Title, Button, Box, ActionIcon } from '@mantine/core';
 import { IconCamera, IconArrowLeft } from '@tabler/icons-react';
 
+import { useAlertDispatch } from '../utils/AlertContext';
+import { uploadItemPicture } from '../services/playerService';
+
 export default function PlayerItemPage() {
   const { huntid, itemid } = useParams();
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+  const alertDispatch = useAlertDispatch();
 
   const [itemPic, setItemPic] = React.useState(null);
 
@@ -14,8 +18,17 @@ export default function PlayerItemPage() {
     setItemPic(file);
 
     console.debug('File changed:', file, huntid, itemid);
-    // TODO: Handle file upload to server
-    // await uploadItemPicture(file, huntid, itemid);
+
+    try {
+      await uploadItemPicture(file, huntid, itemid);
+      
+      alertDispatch({ type: 'success', message: 'Item picture uploaded successfully!', show: true });
+      navigate(-1);
+    }
+    catch (err) {
+      console.error('Failed to upload item picture:', err);
+      alertDispatch({ type: 'error', message: 'Failed to upload item picture. Please try again.', show: true });
+    }
   }
 
   return (
