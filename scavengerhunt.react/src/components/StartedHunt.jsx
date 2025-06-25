@@ -20,7 +20,7 @@ export default function StartedHunt(props) {
       try {
         const items = await getItemsForPlayer(hunt.huntId);
 
-        if (items.some((item) => item.status === 'Correct')) setIsCompleted(true);
+        if (items.every((item) => item.status === 'Correct')) setIsCompleted(true);
 
         if (items) {
           setItems(items);
