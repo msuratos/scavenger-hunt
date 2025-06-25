@@ -1,6 +1,6 @@
 import React from 'react';
 import { Center, List, Loader, Stack, Text, ThemeIcon, Title } from '@mantine/core';
-import { IconCircleCheck, IconCircleDashed, IconHelpCircle } from '@tabler/icons-react';
+import { IconCircleCheck, IconCircleDashed, IconCircleX, IconHelpCircle } from '@tabler/icons-react';
 import { useNavigate } from 'react-router';
 
 import { getItemsForPlayer } from '../services/playerService';
@@ -50,10 +50,16 @@ export default function StartedHunt(props) {
             <IconCircleCheck size={16} />
         </ThemeIcon>
         );
+      case 'Pending':
+        return (
+          <ThemeIcon color="yellow" size={24} radius="xl">
+            <IconHelpCircle size={16} />
+          </ThemeIcon>
+        );
       default:
         return (
           <ThemeIcon color="red" size={24} radius="xl">
-            <IconHelpCircle size={16} />
+            <IconCircleX size={16} />
           </ThemeIcon>
         );
     }
