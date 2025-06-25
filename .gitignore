@@ -259,3 +259,7 @@ yarn-error.log*
 package-lock.json
 
 .vscode
+
+# Scavenger Hunt specific ignores
+/scavengerhunt.react/dist
+/ScavengerHunt.WebApi/Properties

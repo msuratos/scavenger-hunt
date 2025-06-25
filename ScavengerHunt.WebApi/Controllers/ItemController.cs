@@ -47,7 +47,7 @@ namespace ScavengerHunt.WebApi.Controllers
 
             await _context.Items.AddAsync(new Item
             {
-                Name = name,
+                Name = name!,
                 FkHuntId = huntId,
                 Image = memoryStream.ToArray()
             });

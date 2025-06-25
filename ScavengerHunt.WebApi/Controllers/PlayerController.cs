@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using OpenCvSharp;
 using ScavengerHunt.WebApi.Dtos;
 using ScavengerHunt.WebApi.Persistance;
+using ScavengerHunt.WebApi.Persistance.Entities;
 
 namespace ScavengerHunt.WebApi.Controllers
 {
@@ -95,6 +97,71 @@ namespace ScavengerHunt.WebApi.Controllers
             return BadRequest("Player ID can't be determined");
         }
 
+        [HttpPost("item")]
+        public async Task<IActionResult> UploadItemImageForPlayer(Guid huntId, CancellationToken cancellationToken = default)
+        {
+            // validate player cookie
+            var playerId = GetPlayerIdFromCookie();
+            if (playerId == Guid.Empty) return BadRequest("Player ID can't be determined.");
+
+            // validate hunt ID
+            if (huntId == Guid.Empty) return BadRequest("Hunt ID is required.");
+
+            // check if player exists in the database
+            var player = await _dbContext.Players.SingleOrDefaultAsync(s => s.PlayerId == playerId && s.FkHuntId == huntId);
+            if (player == null) return NotFound("Player not found in the database.");
+
+            _logger.LogDebug("Uploading item image for player");
+
+            // Get the IFormFeature and read the form
+            var formFeature = Request.HttpContext.Features.GetRequiredFeature<IFormFeature>();
+            var form = await formFeature.ReadFormAsync(cancellationToken);
+
+            // Validate form data
+            if (form == null || !form.Any()) return BadRequest("Form data is required");
+            if (!form.ContainsKey("itemId")) return BadRequest("Item ID is required");
+            if (!form.Files.Any()) return BadRequest("Image of item is required");
+
+            var itemIdString = form.First(f => f.Key == "itemId").Value;
+            var itemId = Guid.Parse(itemIdString.First()!);
+            var file = form.Files.Single();
+
+            // TODO: extension validation
+            // TODO: file signature validation
+            // TODO: file size limit validation
+
+            using var memoryStream = new MemoryStream();
+            await file.CopyToAsync(memoryStream, cancellationToken);
+
+            // Determine if the item image from player matches with the item image in items table
+            var item = await _dbContext.Items.SingleOrDefaultAsync(s => s.ItemId == itemId && s.FkHuntId == huntId);
+            if (item == null || item.Image == null) return NotFound("Item not found in the database.");
+
+            double mse = CompareImages(item.Image, memoryStream.ToArray());
+
+            // Define a threshold for similarity (this can be adjusted)
+            //   If the image is similar but not exact, mark as "Pending" as it will be sent to moderators
+            const double notSimilarThreshold = 1000.0;
+            const double looselySimilarThreshold = 200.0;
+            var itemGuessStatus = "Incorrect";
+
+            if (mse > notSimilarThreshold) itemGuessStatus = "Incorrect";
+            else if (mse < notSimilarThreshold && mse > looselySimilarThreshold) itemGuessStatus = "Pending";
+            else itemGuessStatus = "Correct";
+
+            player.PlayerToItems.Add(new PlayerToItem
+            {
+                CreatedDate = DateTime.Now,
+                FkItemId = itemId,
+                FkPlayerId = playerId!.Value,
+                ItemGuessStatus = itemGuessStatus,
+                ItemImage = memoryStream.ToArray()
+            });
+            await _dbContext.SaveChangesAsync(cancellationToken);
+
+            return Ok();
+        }
+
         private Guid? GetPlayerIdFromCookie()
         {
             // check player-id cookie
@@ -107,6 +174,35 @@ namespace ScavengerHunt.WebApi.Controllers
             }
 
             return null;
+        }
+
+        public static double CompareImages(byte[] path1, byte[] path2)
+        {
+            using var img1 = Cv2.ImDecode(path1, ImreadModes.Grayscale);
+            using var img2 = Cv2.ImDecode(path2, ImreadModes.Grayscale);
+
+            // Resize img2 to match img1 if needed
+            if (img1.Size() != img2.Size())
+            {
+                using var resized = new Mat();
+                Cv2.Resize(img2, resized, img1.Size());
+                img2.Dispose();
+                return CompareMSE(img1, resized);
+            }
+            else
+            {
+                return CompareMSE(img1, img2);
+            }
+        }
+
+        private static double CompareMSE(Mat img1, Mat img2)
+        {
+            using var diff = new Mat();
+            Cv2.Absdiff(img1, img2, diff);
+            var diffSquared = diff.Mul(diff);
+            Scalar sum = Cv2.Sum(diffSquared);
+            double mse = sum.Val0 / (img1.Rows * img1.Cols);
+            return mse; // Lower is more similar (0 means identical)
         }
     }
 }

@@ -23,7 +23,7 @@ namespace ScavengerHunt.WebApi.Persistance.Configurations
                 build.Property(prop => prop.FkItemId).IsRequired();
                 build.Property(prop => prop.FkPlayerId).IsRequired();
                 build.Property(prop => prop.CreatedDate).HasDefaultValueSql("GETDATE()");
-                build.Property(prop => prop.ItemGuess).IsRequired().HasMaxLength(500);
+                build.Property(prop => prop.ItemImage).IsRequired();
                 build.Property(prop => prop.ItemGuessStatus).IsRequired().HasMaxLength(20).HasDefaultValue("Pending");
 
                 build.HasOne(nav => nav.Player).WithMany(nav => nav.PlayerToItems).HasForeignKey(fk => fk.FkPlayerId).OnDelete(DeleteBehavior.NoAction);

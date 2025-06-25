@@ -5,7 +5,7 @@
         public int PlayerToItemId { get; set; }
 
         public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
-        public string ItemGuess { get; set; } = string.Empty;
+        public byte[]? ItemImage { get; set; }
         public string ItemGuessStatus { get; set;} = "Pending";  // should only be three states: Pending, Correct, Incorrect
 
         public Guid FkItemId { get; set; }
