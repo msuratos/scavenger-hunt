@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore;
 using ScavengerHunt.WebApi.Dtos;
 using ScavengerHunt.WebApi.Persistance;
 using ScavengerHunt.WebApi.Persistance.Entities;
-using System.Threading;
 
 namespace ScavengerHunt.WebApi.Controllers
 {
@@ -133,13 +132,13 @@ namespace ScavengerHunt.WebApi.Controllers
             using var memoryStream = new MemoryStream();
             await file.CopyToAsync(memoryStream, cancellationToken);
 
-            // TODO: add image to entity. PlayerToItem entity needs to be updated to include the image column
             player.PlayerToItems.Add(new PlayerToItem
             {
                 CreatedDate = DateTime.Now,
                 FkItemId = itemId,
                 FkPlayerId = playerId!.Value,
-                ItemGuessStatus = "Correct"
+                ItemGuessStatus = "Correct",    // TODO: this should be calculated if image matches to item
+                ItemImage = memoryStream.ToArray()
             });
             await _dbContext.SaveChangesAsync(cancellationToken);
 

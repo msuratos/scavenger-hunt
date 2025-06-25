@@ -1,5 +1,5 @@
 import React from 'react';
-import { Center, List, Loader, Stack, Text, ThemeIcon } from '@mantine/core';
+import { Center, List, Loader, Stack, Text, ThemeIcon, Title } from '@mantine/core';
 import { IconCircleCheck, IconCircleDashed, IconHelpCircle } from '@tabler/icons-react';
 import { useNavigate } from 'react-router';
 
@@ -10,6 +10,7 @@ export default function StartedHunt(props) {
   const { hunt } = props;
 
   const [items, setItems] = React.useState([]);
+  const [isCompleted, setIsCompleted] = React.useState(false);
 
   const alertDispatch = useAlertDispatch();
   const navigate = useNavigate();
@@ -18,6 +19,9 @@ export default function StartedHunt(props) {
     async function getItemsForHunt() {
       try {
         const items = await getItemsForPlayer(hunt.huntId);
+
+        if (items.some((item) => item.status === 'Correct')) setIsCompleted(true);
+
         if (items) {
           setItems(items);
         } else {
@@ -58,25 +62,38 @@ export default function StartedHunt(props) {
   return (
     <>
       <Center>
-        {items.length === 0
-          ? (
-            <Stack>
-              <Text c='forest'>Getting items...</Text>
-              <Center>
-                <Loader />
-              </Center>
-            </Stack>
-          )
-          : (
-            <List spacing="xs" size="sm" center>
-              {items.map((item) => (
-                <List.Item key={item.itemId} icon={getItemStatusIcon(item.status)} onClick={() => navigate(`item/${item.itemId}?name=${item.name}`)}>
-                  <Text c='forest' fw={500} td={item.status === 'Correct' ? 'line-through' : undefined}>{item.name}</Text>
-                </List.Item>
-              ))}
-            </List>
-          )
-        }
+        {!isCompleted && (
+          items.length === 0
+            ? (
+              <Stack>
+                <Text c='forest'>Getting items...</Text>
+                <Center>
+                  <Loader />
+                </Center>
+              </Stack>
+            )
+            : (
+              <List spacing="xs" size="sm" center>
+                {items.map((item) => (
+                  <List.Item key={item.itemId} icon={getItemStatusIcon(item.status)} onClick={() => navigate(`item/${item.itemId}?name=${item.name}`)}>
+                    <Text c='forest' fw={500} td={item.status === 'Correct' ? 'line-through' : undefined}>{item.name}</Text>
+                  </List.Item>
+                ))}
+              </List>
+            )
+        )}
+
+        {isCompleted && (
+          <Stack>
+            <Center>
+              <Title order={1} c='forest'>Congratulations!</Title>
+            </Center>
+
+            <Center>
+              <Text c='forest' fw={500}>You have completed the hunt.</Text>
+            </Center>
+          </Stack>
+        )}
       </Center>
     </>
   );
