@@ -15,7 +15,7 @@ export default function App() {
   return (
     <>
       <Card.Section>
-        <Image src={logo} alt="Dog" fit="contain" height={100} mt={5} />
+        <Image src={logo} alt="Logo" fit="contain" height={100} mt={5} />
       </Card.Section>
 
       <Center>

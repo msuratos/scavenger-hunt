@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Button, Card, Center, Image, Group, Text, Title, Loader } from "@mantine/core";
-import axios from "axios";
+
+import { getNextPendingImage, submitReview } from "../services/moderatorService";
 import { useAlertDispatch } from "../utils/AlertContext";
 
 const ModeratorPage = () => {
@@ -9,38 +10,37 @@ const ModeratorPage = () => {
   const [actionLoading, setActionLoading] = useState(false);
   const alertDispatch = useAlertDispatch();
 
-  const fetchNextItem = async () => {
+  async function fetchNextItem() {
     setLoading(true);
+
     try {
-      // Replace with your API endpoint for fetching the next item in the queue
-      const res = await axios.get("/api/v1/moderator/next");
-      setItem(res.data || null);
+      const playerItem = await getNextPendingImage();
+      setItem(playerItem);
     } catch (err) {
       alertDispatch({ type: "error", message: "Failed to fetch next item.", show: true });
       setItem(null);
     }
+
     setLoading(false);
+  };
+
+  async function handleAction(approved) {
+    if (!item) return;
+    setActionLoading(true);
+
+    try {
+      await submitReview({ itemId: item.itemId, playerId: item.playerId, approved: approved });
+      fetchNextItem();
+    } catch (err) {
+      alertDispatch({ type: "error", message: "Failed to submit review.", show: true });
+    }
+
+    setActionLoading(false);
   };
 
   useEffect(() => {
     fetchNextItem();
   }, []);
-
-  const handleAction = async (approved) => {
-    if (!item) return;
-    setActionLoading(true);
-    try {
-      // Replace with your API endpoint for approving/rejecting
-      await axios.post(`/api/v1/moderator/review`, {
-        playerItemId: item.id,
-        approved,
-      });
-      fetchNextItem();
-    } catch (err) {
-      alertDispatch({ type: "error", message: "Failed to submit review.", show: true });
-    }
-    setActionLoading(false);
-  };
 
   if (loading) {
     return <Center><Loader /></Center>;
