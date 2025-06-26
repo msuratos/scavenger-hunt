@@ -9,16 +9,17 @@ export default function PlayerLayout() {
   const [hunt, setHunt] = React.useState();
   const [playerName, setPlayerName] = React.useState('');
 
-  React.useEffect(() => {
-    async function getHuntDetails() {
-      try {
-        const hunt = await getHunt(params.huntid, undefined);
-        setHunt(hunt);
-      } catch (err) {
-        console.error('Failed to get hunt details', err);
-        // Optionally handle alert here
-      }
+  async function getHuntDetails() {
+    try {
+      const hunt = await getHunt(params.huntid, undefined);
+      setHunt(hunt);
+    } catch (err) {
+      console.error('Failed to get hunt details', err);
+      // Optionally handle alert here
     }
+  }
+
+  React.useEffect(() => {
     async function getPlayerDetails() {
       try {
         const playerDetails = await getPlayer(params.huntid);
@@ -28,11 +29,21 @@ export default function PlayerLayout() {
         // Optionally handle navigation or alert here
       }
     }
+
     if (params.huntid) {
       getHuntDetails();
       getPlayerDetails();
     }
   }, [params.huntid]);
+
+  React.useEffect(() => {
+    if (!hunt) return;
+
+    if (hunt?.status !== 'Ended') {
+      const interval = setInterval(getHuntDetails, 1000);
+      return () => clearInterval(interval);
+    }
+  }, [hunt?.status]);
 
   return (
     <>
@@ -48,7 +59,7 @@ export default function PlayerLayout() {
           </Grid>
         </AppShell.Header>
       </AppShell>
-    
+
       <Outlet context={{ hunt, playerName }} />
     </>
   );

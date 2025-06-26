@@ -77,13 +77,13 @@ export default function JoinHuntPage() {
           </Card.Section>
 
           <Center>
-            <Title order={3}>{hunt.title}</Title>
+            <Title order={3} c='forest'>{hunt.title}</Title>
           </Center>
           <Center>
-            <Title order={4}>{hunt.subtitle}</Title>
+            <Title order={4} c='forest'>{hunt.subtitle}</Title>
           </Center>
 
-          <TextInput label="Player Name" placeholder="Enter name" value={playerName} onChange={e => setPlayerName(e.currentTarget.value)} withAsterisk />
+          <TextInput label="Player Name" placeholder="Enter name" c='forest.8' value={playerName} onChange={e => setPlayerName(e.currentTarget.value)} withAsterisk />
           <Button disabled={playerName.trim() === ''} loading={submitButtonLoading} onClick={onSubmitClick}>Submit</Button>
         </>
       )}

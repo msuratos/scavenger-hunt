@@ -65,3 +65,21 @@ export async function joinHunt(huntCode, playerName) {
     throw err;
   }
 }
+
+export async function setStatus(huntId, status) {
+  try {
+    const response = await fetch(`/api/v1/hunt/${huntId}/status`, {
+      method: 'POST',
+      body: JSON.stringify({ status }),
+      headers: { 'Content-Type': 'application/json' }
+    });
+
+    if (!response.ok) {
+      throw Error(await response.text());
+    }
+  }
+  catch (err) {
+    console.error(`Setting hunt status failed`, err);
+    throw err;
+  }
+}
