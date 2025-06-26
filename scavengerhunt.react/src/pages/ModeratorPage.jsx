@@ -45,7 +45,7 @@ const ModeratorPage = () => {
   };
 
   useEffect(() => {
-    fetchNextItem();    
+    fetchNextItem();
   }, []);
 
   useEffect(() => {
@@ -59,11 +59,24 @@ const ModeratorPage = () => {
     if (huntStatus !== 'Ended') {
       const interval = setInterval(fetchHunt, 2000);
       return () => clearInterval(interval);
-    }    
+    }
   }, [huntStatus]);
 
+  React.useEffect(() => {
+    if (huntStatus !== 'Ended') {
+      if (!item) {
+        const interval = setInterval(fetchNextItem, 5000);
+        return () => clearInterval(interval);
+      }
+    }
+  }, [huntStatus, item]);
+
   if (huntStatus === 'Ended') {
-    return <Center><Text c='forest'>Hunt has ended. No more items to review.</Text></Center>;
+    return (
+      <Center>
+        <Text c='forest'>The hunt has ended. No more items to review.</Text>
+      </Center>
+    );
   }
 
   if (loading) {

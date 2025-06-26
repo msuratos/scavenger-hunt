@@ -56,8 +56,8 @@ export default function ItemAdminPage() {
       </Center>
 
       <Group mb="md" grow>
-        <Button color="green" disabled={hunt?.status !== 'Not Started'} loading={loading} onClick={() => handleAction('Started')}>Start</Button>
-        <Button color="red" disabled={hunt?.status === 'Ended'} loading={loading} onClick={() => handleAction('Ended')}>End</Button>
+        <Button color="forest" disabled={hunt?.status !== 'Not Started'} loading={loading} onClick={() => handleAction('Started')}>Start</Button>
+        <Button color="darkorange" disabled={hunt?.status === 'Ended'} loading={loading} onClick={() => handleAction('Ended')}>End</Button>
       </Group>
 
       <Divider />

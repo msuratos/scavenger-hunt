@@ -1,6 +1,6 @@
 import React from 'react';
 import { useParams, useSearchParams, useNavigate } from 'react-router';
-import { Center, FileInput, Title, Button, Box, ActionIcon, Progress } from '@mantine/core';
+import { ActionIcon, Box, Center, FileInput, Loader, RingProgress, Stack, Text, Title } from '@mantine/core';
 import { IconCamera, IconArrowLeft } from '@tabler/icons-react';
 
 import { useAlertDispatch } from '../utils/AlertContext';
@@ -43,6 +43,7 @@ export default function PlayerItemPage() {
         size="sm"
         variant="subtle"
         onClick={() => navigate(-1)}
+        disabled={uploading}
         style={{ position: 'absolute', top: 0, left: 0 }}
       >
         <IconArrowLeft />
@@ -52,9 +53,31 @@ export default function PlayerItemPage() {
         <Title order={1} c='forest'>{searchParams.get('name')}</Title>
       </Center>
 
-      {uploading && <Progress value={progress} mb={10} animate />}
+      {uploading && (
+        <Center>
+          {progress < 100
+            ? (<RingProgress
+                mb={10}
+                label={<Text c='forest' ta="center">{progress}%</Text>}
+                sections={[{ value: progress, color: 'forest' }]}
+              />
+            )
+            : (
+              <Stack>
+                <Center>
+                  <Loader color="forest" />
+                </Center>
 
-      <FileInput label="Item Picture" leftSection={<IconCamera />} value={itemPic} onChange={handleFileChange} clearable withAsterisk disabled={uploading} />
+                <Text c='forest' ta="center">Processing...</Text>
+              </Stack>
+            )
+          }
+        </Center>
+      )}
+
+      {!uploading &&
+        <FileInput label="Item Picture" leftSection={<IconCamera />} value={itemPic} onChange={handleFileChange} clearable withAsterisk disabled={uploading} />
+      }
     </Box>
   );
 }
