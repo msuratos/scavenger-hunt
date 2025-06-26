@@ -6,17 +6,19 @@ import { DatesProvider } from '@mantine/dates';
 import 'dayjs/locale/en';
 
 import App from './pages/App';
+import DashboardJoinPage from './pages/DashboardJoinPage';
 import HuntPage from "./pages/HuntPage";
-import PlayerLayout from './components/PlayerLayout';
 import HuntsPage from './pages/HuntsPage';
 import ItemAdminPage from './pages/ItemAdminPage';
 import ItemPage from './pages/ItemPage';
 import JoinHuntPage from "./pages/JoinHuntPage";
-import PlayerItemPage from "./pages/PlayerItemPage";
 import ModeratorPage from './pages/ModeratorPage';
+import PlayerLayout from './components/PlayerLayout';
+import PlayerItemPage from "./pages/PlayerItemPage";
 
 import Alert from './components/Alert';
 import Layout from './components/Layout';
+import DashboardLayout from './components/dashboard/Layout';
 
 import { AlertProvider } from "./utils/AlertContext";
 import { theme } from "./utils/theme";
@@ -36,6 +38,11 @@ root.render(
 
           <Router>
             <Routes>
+              <Route path='dashboard' element={<DashboardLayout />}>
+                <Route index element={<DashboardJoinPage />} />
+                <Route path=':huntid' element={<>Dashboard</>} />
+              </Route>
+
               <Route element={<Layout />}>
                 <Route index element={<App />} />
 
