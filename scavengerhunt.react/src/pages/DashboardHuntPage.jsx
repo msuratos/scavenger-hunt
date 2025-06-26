@@ -1,6 +1,7 @@
 import React from 'react';
 import { Card, Group, Text, Avatar, Stack, Title, Divider, Image, Box } from '@mantine/core';
 import { Carousel } from '@mantine/carousel';
+import Autoplay from 'embla-carousel-autoplay';
 
 import '@mantine/carousel/styles.css';
 
@@ -18,7 +19,7 @@ const itemImages = [
 ];
 
 export default function DashboardHuntPage() {
-  // In a real app, fetch player rankings and images from API
+  const autoplay = React.useRef(Autoplay({ delay: 3000 }));
 
   return (
     <Group align="flex-start" spacing="xl">
@@ -49,6 +50,7 @@ export default function DashboardHuntPage() {
         <Carousel 
           slideGap='xl'
           slideSize="90%"
+          plugins={[autoplay.current]}
           emblaOptions={{
             loop: true,
             dragFree: false,
