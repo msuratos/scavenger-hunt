@@ -36,7 +36,7 @@ export default function Alert() {
   return (
     <>
       {alert.show && (
-        <Container fluid style={{ position: 'fixed', top: 25, left: 0, width: '100%' }}>
+        <Container fluid style={{ position: 'fixed', top: 25, left: 0, width: '100%', zIndex: 1000 }}>
           <Notification icon={getIcon} color={getColor} title={alert.type} onClose={() => alertDispatch({ show: false })}>
             {alert.message}
           </Notification>
