@@ -1,6 +1,6 @@
 export async function createHunt(values) {
   try {
-    const response = await fetch('api/v1/hunt', { method: 'POST', body: JSON.stringify(values), headers: { 'Content-Type': 'application/json' }});
+    const response = await fetch('/api/v1/hunt', { method: 'POST', body: JSON.stringify(values), headers: { 'Content-Type': 'application/json' }});
     const hunt = await response.json();
     return hunt;
   }
@@ -37,7 +37,7 @@ export async function getHunt(huntId, code) {
 
 export async function getHunts() {
   try {
-    const response = await fetch('api/v1/hunt/all');
+    const response = await fetch('/api/v1/hunt/all');
     const hunts = await response.json();
     return hunts;
   }

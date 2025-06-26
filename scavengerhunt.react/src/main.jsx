@@ -37,16 +37,23 @@ root.render(
             <Routes>
               <Route element={<Layout />}>
                 <Route index element={<App />} />
+
                 <Route path='hunt'>
                   <Route path=":huntid" element={<PlayerLayout />}>
                     <Route index element={<HuntPage />} />
-                    <Route path="item/:itemid" element={<PlayerItemPage />} />
+                    <Route path='item/:itemid' element={<PlayerItemPage />} />
                   </Route>
+
+                  <Route path=':huntid/moderator' element={<><h1>Moderator</h1></>} />
                   <Route path='join/:code?' element={<JoinHuntPage />} />
                 </Route>
-                <Route path='/hunts' element={<HuntsPage />} />
-                <Route path='/item/admin/:huntid' element={<ItemAdminPage />} />
-                <Route path='/item/:itemid' element={<ItemPage />} />
+
+                <Route path='admin'>
+                  <Route path='hunts' element={<HuntsPage />} />
+                  <Route path='item/admin/:huntid' element={<ItemAdminPage />} />
+                  <Route path='item/:itemid' element={<ItemPage />} />
+                </Route>
+
                 <Route path="*" element={<><h1>Error</h1><p>Page Not Found!</p></>} />
               </Route>
             </Routes>
