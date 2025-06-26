@@ -166,5 +166,22 @@ namespace ScavengerHunt.WebApi.Controllers
 
             return Ok(new { Message = "Successfully joined the hunt.", newPlayer.PlayerId, hunt.HuntId });
         }
+
+        [HttpPost("{huntId:guid}/status")]
+        public async Task<IActionResult> SetStatus(Guid huntId, [FromBody]HuntStatusDto statusDto)
+        {
+            // validate parameters
+            if (huntId == Guid.Empty) return BadRequest("Hunt ID is required");
+            if (string.IsNullOrEmpty(statusDto.Status)) return BadRequest("Status value is required");
+
+            // get hunt
+            var hunt = await _context.Hunts.SingleOrDefaultAsync(s => s.HuntId == huntId);
+            if (hunt == null) return BadRequest("Could not find Hunt");
+
+            hunt.Status = statusDto.Status;
+            await _context.SaveChangesAsync();
+
+            return Ok();
+        }
     }
 }

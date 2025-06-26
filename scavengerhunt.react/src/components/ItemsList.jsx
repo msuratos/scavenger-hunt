@@ -1,9 +1,9 @@
-import { Card } from "@mantine/core";
+import { Card, Center } from "@mantine/core";
 // import QRCode from 'qrcode-react';
 
 import Item from './Item';
-// import GetQrUrl from '../config/qrUrlConfig';
 import Loading from "./Loading";
+// import GetQrUrl from '../config/qrUrlConfig';
 
 export default function ItemsList(props) {
   const { items, loading } = props;
@@ -20,7 +20,7 @@ export default function ItemsList(props) {
           </Card>
         ))
       }
-      { loading && <Loading customStyles={{position: 'relative'}} />}
+      {loading && <Center><Loading customStyles={{position: 'relative'}} /></Center>}
     </>
   )
 };

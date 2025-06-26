@@ -138,6 +138,7 @@ namespace ScavengerHunt.WebApi.Controllers
             if (item == null || item.Image == null) return NotFound("Item not found in the database.");
 
             double mse = CompareImages(item.Image, memoryStream.ToArray());
+            _logger.LogInformation("Player's ({playerId}) image MSE value {mse}", playerId, mse);
 
             // Define a threshold for similarity (this can be adjusted)
             //   If the image is similar but not exact, mark as "Pending" as it will be sent to moderators
@@ -176,7 +177,7 @@ namespace ScavengerHunt.WebApi.Controllers
             return null;
         }
 
-        public static double CompareImages(byte[] path1, byte[] path2)
+        private static double CompareImages(byte[] path1, byte[] path2)
         {
             using var img1 = Cv2.ImDecode(path1, ImreadModes.Grayscale);
             using var img2 = Cv2.ImDecode(path2, ImreadModes.Grayscale);
