@@ -67,7 +67,7 @@ export default function PlayerItemPage() {
                 <Center>
                   <Loader color="forest" />
                 </Center>
-                
+
                 <Text c='forest' ta="center">Processing...</Text>
               </Stack>
             )
@@ -77,7 +77,7 @@ export default function PlayerItemPage() {
 
       {!uploading &&
         <FileInput label="Item Picture" leftSection={<IconCamera />} value={itemPic} onChange={handleFileChange} clearable withAsterisk disabled={uploading} />
-    }
+      }
     </Box>
   );
 }

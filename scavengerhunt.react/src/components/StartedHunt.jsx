@@ -15,26 +15,33 @@ export default function StartedHunt(props) {
   const alertDispatch = useAlertDispatch();
   const navigate = useNavigate();
 
-  React.useEffect(() => {
-    async function getItemsForHunt() {
-      try {
-        const items = await getItemsForPlayer(hunt.huntId);
+  async function getItemsForHunt() {
+    try {
+      const items = await getItemsForPlayer(hunt.huntId);
 
-        if (items.every((item) => item.status === 'Correct')) setIsCompleted(true);
+      if (items.every((item) => item.status === 'Correct')) setIsCompleted(true);
 
-        if (items) {
-          setItems(items);
-        } else {
-          alertDispatch({ type: 'warning', message: 'No items available for you at the moment.', show: true });
-        }
-      } catch (err) {
-        console.error('Failed to get items for player', err);
-        alertDispatch({ type: 'error', message: err.message, show: true });
+      if (items) {
+        setItems(items);
+      } else {
+        alertDispatch({ type: 'warning', message: 'No items available for you at the moment.', show: true });
       }
+    } catch (err) {
+      console.error('Failed to get items for player', err);
+      alertDispatch({ type: 'error', message: err.message, show: true });
     }
-    
+  }
+
+  React.useEffect(() => {    
     getItemsForHunt();
   }, []);
+
+  React.useEffect(() => {
+    if (!isCompleted) {
+      const interval = setInterval(() => getItemsForHunt(), 10000);
+      return () => clearInterval(interval);
+    }
+  }, [isCompleted]);
 
   function getItemStatusIcon(status) {
     switch (status) {
