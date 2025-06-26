@@ -1,9 +1,11 @@
 import React from 'react';
 import { useParams } from 'react-router';
 
+import DashboardActiveHunt from '../components/dashboard/DashboardActiveHunt';
+import DashboardWaitHunt from '../components/dashboard/DashboardWaitHunt';
+
 import { useAlertDispatch } from '../utils/AlertContext';
 import { getHunt } from '../services/huntService';
-import DashboardActiveHunt from '../components/dashboard/DashboardActiveHunt';
 
 export default function DashboardHuntPage() {
   const [hunt, setHunt] = React.useState(null);
@@ -32,7 +34,7 @@ export default function DashboardHuntPage() {
 
   return (
     <>
-      {hunt?.status === 'Not Started' && <>Hunt has not started! QR Code</>}
+      {hunt?.status === 'Not Started' && <DashboardWaitHunt hunt={hunt} />}
       {hunt?.status === 'Started' && <DashboardActiveHunt hunt={hunt} />}
       {hunt?.status === 'Ended' && <>Hunt has ended! Player rankings</>}
     </>

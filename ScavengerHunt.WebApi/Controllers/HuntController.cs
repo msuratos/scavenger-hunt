@@ -65,38 +65,25 @@ namespace ScavengerHunt.WebApi.Controllers
             _logger.LogInformation($"Getting hunt with huntId: {huntId}, code: {code}");
 
             // find hunt by huntId or code
+            Hunt? hunt = null;
             HuntDto? huntDto = null;
             if (huntId.HasValue)
-            {
-                var hunt = await _context.Hunts.FirstOrDefaultAsync(h => h.HuntId == huntId.Value);
-                if (hunt != null && hunt.EndDateTime > DateTime.Now)
-                {
-                    huntDto = new HuntDto
-                    {
-                        HuntId = hunt.HuntId,
-                        Title = hunt.Title,
-                        Subtitle = hunt.SubTitle,
-                        StartDate = hunt.StartDateTime,
-                        EndDate = hunt.EndDateTime,
-                        Status = hunt.Status
-                    };
-                }
-            }
+                hunt = await _context.Hunts.FirstOrDefaultAsync(h => h.HuntId == huntId.Value && h.EndDateTime > DateTime.Now);
             else if (!string.IsNullOrEmpty(code))
+                hunt = await _context.Hunts.FirstOrDefaultAsync(h => h.Code == code && h.EndDateTime > DateTime.Now);
+
+            if (hunt != null)
             {
-                var hunt2 = await _context.Hunts.FirstOrDefaultAsync(h => h.Code == code && h.EndDateTime > DateTime.Now);
-                if (hunt2 != null)
+                huntDto = new HuntDto
                 {
-                    huntDto = new HuntDto
-                    {
-                        HuntId = hunt2.HuntId,
-                        Title = hunt2.Title,
-                        Subtitle = hunt2.SubTitle,
-                        StartDate = hunt2.StartDateTime,
-                        EndDate = hunt2.EndDateTime,
-                        Status = hunt2.Status
-                    };
-                }
+                    HuntId = hunt.HuntId,
+                    Code = hunt.Code,
+                    Title = hunt.Title,
+                    Subtitle = hunt.SubTitle,
+                    StartDate = hunt.StartDateTime,
+                    EndDate = hunt.EndDateTime,
+                    Status = hunt.Status
+                };
             }
 
             // check if hunt was found
