@@ -15,7 +15,7 @@ export default function App() {
   return (
     <>
       <Card.Section>
-        <Image src={logo} alt="Dog" fit="contain" height={100} mt={5} />
+        <Image src={logo} alt="Logo" fit="contain" height={100} mt={5} />
       </Card.Section>
 
       <Center>
@@ -28,7 +28,7 @@ export default function App() {
 
       <Card.Section p={5}>
         <Button mb={5} onClick={() => navigate('/hunt/join')} fullWidth>Join Hunt</Button>
-        <Button mb={5} onClick={() => navigate('/hunts')} fullWidth>Create Hunt</Button>
+        <Button mb={5} onClick={() => navigate('/admin/hunts')} fullWidth>Create Hunt</Button>
       </Card.Section>
     </>
   );

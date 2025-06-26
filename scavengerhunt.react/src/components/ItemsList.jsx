@@ -15,7 +15,7 @@ export default function ItemsList(props) {
           <Card key={item.itemId}>
             <Card.Section style={{ textAlign: 'center' }}>
               <Item {...item}></Item>
-              {/* <QRCode value={GetQrUrl() + "/item/" + value.itemId} level={"H"} includeMargin={true} /> */}
+              {/* <QRCode value={GetQrUrl() + "/admin/item/" + value.itemId} level={"H"} includeMargin={true} /> */}
             </Card.Section>
           </Card>
         ))

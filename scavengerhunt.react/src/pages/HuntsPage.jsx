@@ -72,7 +72,7 @@ export default function HuntPage() {
       {
         hunts.map((value) => (
           <React.Fragment key={value.huntId}>
-            <Button variant='subtle' onClick={() => navigate("/item/admin/" + value.huntId)} fullWidth>{value.title}</Button>
+            <Button variant='subtle' onClick={() => navigate("/admin/item/admin/" + value.huntId)} fullWidth>{value.title}</Button>
           </React.Fragment>
         ))
       }
