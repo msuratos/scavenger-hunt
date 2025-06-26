@@ -13,6 +13,7 @@ import ItemAdminPage from './pages/ItemAdminPage';
 import ItemPage from './pages/ItemPage';
 import JoinHuntPage from "./pages/JoinHuntPage";
 import PlayerItemPage from "./pages/PlayerItemPage";
+import ModeratorPage from './pages/ModeratorPage';
 
 import Alert from './components/Alert';
 import Layout from './components/Layout';
@@ -44,7 +45,7 @@ root.render(
                     <Route path='item/:itemid' element={<PlayerItemPage />} />
                   </Route>
 
-                  <Route path=':huntid/moderator' element={<><h1>Moderator</h1></>} />
+                  <Route path=':huntid/moderator' element={<ModeratorPage />} />
                   <Route path='join/:code?' element={<JoinHuntPage />} />
                 </Route>
 
