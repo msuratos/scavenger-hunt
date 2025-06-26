@@ -15,6 +15,7 @@ import JoinHuntPage from "./pages/JoinHuntPage";
 import ModeratorPage from './pages/ModeratorPage';
 import PlayerLayout from './components/PlayerLayout';
 import PlayerItemPage from "./pages/PlayerItemPage";
+import DashboardHuntPage from './pages/DashboardHuntPage';
 
 import Alert from './components/Alert';
 import Layout from './components/Layout';
@@ -40,7 +41,7 @@ root.render(
             <Routes>
               <Route path='dashboard' element={<DashboardLayout />}>
                 <Route index element={<DashboardJoinPage />} />
-                <Route path=':huntid' element={<>Dashboard</>} />
+                <Route path=':huntid' element={<DashboardHuntPage />} />
               </Route>
 
               <Route element={<Layout />}>
