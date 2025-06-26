@@ -1,6 +1,6 @@
 import React from 'react';
 import { useParams, useSearchParams, useNavigate } from 'react-router';
-import { ActionIcon, Box, Center, FileInput, Loader, RingProgress, Text, Title } from '@mantine/core';
+import { ActionIcon, Box, Center, FileInput, Loader, RingProgress, Stack, Text, Title } from '@mantine/core';
 import { IconCamera, IconArrowLeft } from '@tabler/icons-react';
 
 import { useAlertDispatch } from '../utils/AlertContext';
@@ -63,10 +63,13 @@ export default function PlayerItemPage() {
               />
             )
             : (
-              <>
-                <Loader color="forest" />
+              <Stack>
+                <Center>
+                  <Loader color="forest" />
+                </Center>
+                
                 <Text c='forest' ta="center">Processing...</Text>
-              </>
+              </Stack>
             )
           }
         </Center>

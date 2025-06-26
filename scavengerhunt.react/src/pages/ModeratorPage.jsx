@@ -94,10 +94,10 @@ const ModeratorPage = () => {
       <Text>Item: {item.itemName}</Text>
 
       <Group mt="md" grow>
-        <Button color="green" loading={actionLoading} onClick={() => handleAction(true)}>
+        <Button color="forest" loading={actionLoading} onClick={() => handleAction(true)}>
           Approve
         </Button>
-        <Button color="red" loading={actionLoading} onClick={() => handleAction(false)}>
+        <Button color="darkorange" loading={actionLoading} onClick={() => handleAction(false)}>
           Reject
         </Button>
       </Group>
