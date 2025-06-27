@@ -202,8 +202,8 @@ namespace ScavengerHunt.WebApi.Controllers
 
         private static double CompareImages(byte[] path1, byte[] path2)
         {
-            using var img1 = Cv2.ImDecode(path1, ImreadModes.Grayscale);
-            using var img2 = Cv2.ImDecode(path2, ImreadModes.Grayscale);
+            using var img1 = Cv2.ImDecode(path1, ImreadModes.Color);
+            using var img2 = Cv2.ImDecode(path2, ImreadModes.Color);
 
             // Resize img2 to match img1 if needed
             if (img1.Size() != img2.Size())
