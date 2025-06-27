@@ -28,6 +28,20 @@ export async function getPlayer(huntId) {
   }
 }
 
+export async function getPlayerRankings(huntId) {
+  try {
+    const response = await fetch(`/api/v1/player/rankings?huntId=${huntId}`);
+    if (!response.ok) {
+      throw new Error('Failed to fetch player rankings');
+    }
+    return await response.json();
+  }
+  catch (err) {
+    console.error('Failed to get player rankings', err);
+    throw err;
+  }
+}
+
 export async function isPlayerValid() {
   try {
     const response = await fetch('/api/v1/player/isvalid');
