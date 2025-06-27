@@ -2,6 +2,7 @@ import React from 'react';
 import { useParams } from 'react-router';
 
 import DashboardActiveHunt from '../components/dashboard/DashboardActiveHunt';
+import DashboardEndHunt from '../components/dashboard/DashboardEndHunt';
 import DashboardWaitHunt from '../components/dashboard/DashboardWaitHunt';
 
 import { useAlertDispatch } from '../utils/AlertContext';
@@ -36,7 +37,7 @@ export default function DashboardHuntPage() {
     <>
       {hunt?.status === 'Not Started' && <DashboardWaitHunt hunt={hunt} />}
       {hunt?.status === 'Started' && <DashboardActiveHunt hunt={hunt} />}
-      {hunt?.status === 'Ended' && <>Hunt has ended! Player rankings</>}
+      {hunt?.status === 'Ended' && <DashboardEndHunt hunt={hunt} />}
     </>
   )
 };
