@@ -83,6 +83,29 @@ namespace ScavengerHunt.WebApi.Controllers
             }
         }
 
+        [HttpGet("rankings")]
+        public async Task<IActionResult> GetPlayerRankings(Guid huntId)
+        {
+            // validate request
+            if (huntId == Guid.Empty) return BadRequest("Hunt ID is required.");
+            _logger.LogDebug("Getting player rankings for hunt {huntId}", huntId);
+
+            // get players for the hunt
+            var players = await _dbContext.Players
+                .Where(p => p.FkHuntId == huntId)
+                .Include(p => p.PlayerToItems)
+                 .Select(player => new
+                 {
+                     player.PlayerId,
+                     player.Name,
+                     Points = player.PlayerToItems.Select(s => s.ItemGuessStatus == "Correct" ? 3 : s.ItemGuessStatus == "Pending" ? 2 : 1).Sum()
+                 })
+                .OrderByDescending(p => p.Points)
+                .ToListAsync();
+
+            return Ok(players);
+        }
+
         [HttpGet("isvalid")]
         public IActionResult IsPlayerValid()
         {
