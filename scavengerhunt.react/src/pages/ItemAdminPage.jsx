@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
-import { Button, Center, Divider, Group, Title } from "@mantine/core";
+import { Box, Button, Center, Divider, Group, Title } from "@mantine/core";
 
 import ItemsList from '../components/ItemsList';
 import { getItems } from '../services/itemService';
@@ -48,7 +48,7 @@ export default function ItemAdminPage() {
   }, []);
 
   return (
-    <>
+    <Box style={{ overflowY: 'auto', padding: '20px', transform: items.length > 3 ? 'translateY(50vh)' : 'none' }}>
       <Center>
         <Title order={3} c='forest'>
           {hunt ? `${hunt.title}` : 'Loading Hunt...'}
@@ -63,6 +63,6 @@ export default function ItemAdminPage() {
       <Divider />
 
       <ItemsList items={items} loading={loading} />
-    </>
+    </Box>
   );
 }
