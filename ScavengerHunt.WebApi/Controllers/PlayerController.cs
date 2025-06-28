@@ -5,6 +5,7 @@ using OpenCvSharp;
 using ScavengerHunt.WebApi.Dtos;
 using ScavengerHunt.WebApi.Persistance;
 using ScavengerHunt.WebApi.Persistance.Entities;
+using ScavengerHunt.WebApi.Utils;
 
 namespace ScavengerHunt.WebApi.Controllers
 {
@@ -14,11 +15,21 @@ namespace ScavengerHunt.WebApi.Controllers
     {
         private readonly ILogger<PlayerController> _logger;
         private readonly HuntDbContext _dbContext;
+        private readonly ImageAnalysisHelper _imageAnalysisHelper;
+        private readonly ImageSimilarityHelper _imageSimilarityHelper;
 
-        public PlayerController(ILogger<PlayerController> logger, HuntDbContext context)
+        public PlayerController(
+            ILogger<PlayerController> logger, 
+            HuntDbContext context, 
+            ImageAnalysisHelper imageAnalysisHelper, 
+            ImageSimilarityHelper imageSimilarityHelper
+        )
         {
             _logger = logger;
             _dbContext = context;
+
+            _imageAnalysisHelper = imageAnalysisHelper;
+            _imageSimilarityHelper = imageSimilarityHelper;
         }
 
         [HttpGet("items")]
@@ -160,18 +171,34 @@ namespace ScavengerHunt.WebApi.Controllers
             var item = await _dbContext.Items.SingleOrDefaultAsync(s => s.ItemId == itemId && s.FkHuntId == huntId);
             if (item == null || item.Image == null) return NotFound("Item not found in the database.");
 
-            double mse = CompareImages(item.Image, memoryStream.ToArray());
-            _logger.LogInformation("Player's ({playerId}) image MSE value {mse}", playerId, mse);
+            var itemImageAnalysis = await _imageAnalysisHelper.AnalyzeImageAsync(new MemoryStream(item.Image), cancellationToken);
+            var playerImageAnalysis = await _imageAnalysisHelper.AnalyzeImageAsync(file.OpenReadStream(), cancellationToken);
 
-            // Define a threshold for similarity (this can be adjusted)
+            var similarity = ImageSimilarityHelper.ComputeSimilarity(itemImageAnalysis, playerImageAnalysis);
+            _logger.LogInformation("Player's ({playerId}) image similarity value {similarity}", playerId, similarity);
+
+            // If similarity is below a certain threshold, we can consider it a match
             //   If the image is similar but not exact, mark as "Pending" as it will be sent to moderators
-            const double notSimilarThreshold = 1000.0;
-            const double looselySimilarThreshold = 200.0;
             var itemGuessStatus = "Incorrect";
+            const double notSimilarThreshold = 0.2;
+            const double looselySimilarThreshold = 0.6;
 
-            if (mse > notSimilarThreshold) itemGuessStatus = "Incorrect";
-            else if (mse < notSimilarThreshold && mse > looselySimilarThreshold) itemGuessStatus = "Pending";
-            else itemGuessStatus = "Correct";
+            if (similarity < notSimilarThreshold) itemGuessStatus = "Incorrect";        // Not similar
+            else if (similarity < looselySimilarThreshold) itemGuessStatus = "Pending"; // Loosely similar
+            else itemGuessStatus = "Correct";                                           // Exact match
+
+            //double mse = CompareImages(item.Image, memoryStream.ToArray());
+            //_logger.LogInformation("Player's ({playerId}) image MSE value {mse}", playerId, mse);
+
+            //// Define a threshold for similarity (this can be adjusted)
+            ////   If the image is similar but not exact, mark as "Pending" as it will be sent to moderators
+            //var itemGuessStatus = "Incorrect";
+            //const double notSimilarThreshold = 1000.0;
+            //const double looselySimilarThreshold = 200.0;
+
+            //if (mse > notSimilarThreshold) itemGuessStatus = "Incorrect";
+            //else if (mse < notSimilarThreshold && mse > looselySimilarThreshold) itemGuessStatus = "Pending";
+            //else itemGuessStatus = "Correct";
 
             player.PlayerToItems.Add(new PlayerToItem
             {
