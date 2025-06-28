@@ -131,7 +131,7 @@ namespace ScavengerHunt.WebApi.Controllers
             if (huntId == Guid.Empty) return BadRequest("Hunt ID is required.");
 
             // check if player exists in the database
-            var player = await _dbContext.Players.SingleOrDefaultAsync(s => s.PlayerId == playerId && s.FkHuntId == huntId);
+            var player = await _dbContext.Players.Include(i => i.PlayerToItems).SingleOrDefaultAsync(s => s.PlayerId == playerId && s.FkHuntId == huntId);
             if (player == null) return NotFound("Player not found in the database.");
 
             _logger.LogDebug("Uploading item image for player");
@@ -173,14 +173,20 @@ namespace ScavengerHunt.WebApi.Controllers
             else if (mse < notSimilarThreshold && mse > looselySimilarThreshold) itemGuessStatus = "Pending";
             else itemGuessStatus = "Correct";
 
-            player.PlayerToItems.Add(new PlayerToItem
-            {
-                CreatedDate = DateTime.Now,
-                FkItemId = itemId,
-                FkPlayerId = playerId!.Value,
-                ItemGuessStatus = itemGuessStatus,
-                ItemImage = memoryStream.ToArray()
-            });
+            PlayerToItem? playerToItem = null;
+            if (player.PlayerToItems.Any(a => a.FkItemId == itemId && a.FkPlayerId == playerId!.Value))
+                playerToItem = player.PlayerToItems.Single(a => a.FkItemId == itemId && a.FkPlayerId == playerId!.Value);
+            else
+                playerToItem = new PlayerToItem { FkItemId = itemId, FkPlayerId = playerId!.Value };
+
+            playerToItem.ItemGuessStatus = itemGuessStatus;
+            playerToItem.ItemImage = memoryStream.ToArray();
+            playerToItem.CreatedDate = DateTime.Now;
+
+            // if no id, it means it's an add
+            if (playerToItem.PlayerToItemId == 0)
+                player.PlayerToItems.Add(playerToItem);
+
             await _dbContext.SaveChangesAsync(cancellationToken);
 
             return Ok();

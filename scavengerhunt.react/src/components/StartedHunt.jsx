@@ -72,6 +72,19 @@ export default function StartedHunt(props) {
     }
   }
 
+  function onListItemClick(item) {
+    if (item.status === 'Correct' || item.status === 'Pending') {
+      if (item.status === 'Pending')
+        alertDispatch({ type: 'warning', message: 'This item is still pending review.', show: true });
+      else
+        alertDispatch({ type: 'info', message: 'You have already completed this item.', show: true });
+
+      return;
+    }
+
+    navigate(`item/${item.itemId}?name=${item.name}`);
+  }
+
   return (
     <>
       <Center>
@@ -88,7 +101,7 @@ export default function StartedHunt(props) {
             : (
               <List spacing="xs" size="sm" center>
                 {items.map((item) => (
-                  <List.Item key={item.itemId} icon={getItemStatusIcon(item.status)} onClick={() => navigate(`item/${item.itemId}?name=${item.name}`)}>
+                  <List.Item key={item.itemId} icon={getItemStatusIcon(item.status)} onClick={() => onListItemClick(item)}>
                     <Text c='forest' fw={500} td={item.status === 'Correct' ? 'line-through' : undefined}>{item.name}</Text>
                   </List.Item>
                 ))}
