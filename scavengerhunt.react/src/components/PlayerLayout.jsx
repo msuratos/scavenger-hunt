@@ -1,6 +1,9 @@
 import React from 'react';
+import { useNavigate } from 'react-router';
 import { AppShell, Grid, Text } from '@mantine/core';
 import { Outlet, useParams } from 'react-router';
+
+import { useAlertDispatch } from '../utils/AlertContext';
 import { getPlayer } from '../services/playerService';
 import { getHunt } from '../services/huntService';
 
@@ -9,13 +12,17 @@ export default function PlayerLayout() {
   const [hunt, setHunt] = React.useState();
   const [playerName, setPlayerName] = React.useState('');
 
+  const navigate = useNavigate();
+  const alertDispatch = useAlertDispatch();
+
   async function getHuntDetails() {
     try {
       const hunt = await getHunt(params.huntid, undefined);
       setHunt(hunt);
     } catch (err) {
       console.error('Failed to get hunt details', err);
-      // Optionally handle alert here
+      alertDispatch({ type: 'error', message: err.message, show: true });
+      navigate('/hunt/join', { replace: true });
     }
   }
 
@@ -26,7 +33,8 @@ export default function PlayerLayout() {
         setPlayerName(playerDetails.name);
       } catch (err) {
         console.error('Not a valid player', err);
-        // Optionally handle navigation or alert here
+        alertDispatch({ type: 'error', message: err.message, show: true });
+        navigate(`/hunt/join/${hunt.code}`, { replace: true });
       }
     }
 
@@ -34,7 +42,7 @@ export default function PlayerLayout() {
       getHuntDetails();
       getPlayerDetails();
     }
-  }, [params.huntid]);
+  }, [params.huntid, hunt]);
 
   React.useEffect(() => {
     if (!hunt) return;
