@@ -51,7 +51,7 @@ foreach (var player in players)
     foreach (var item in player.PlayerToItems)
     {
         // copy the image to the directory
-        var fileStream = File.Create(directory.FullName);
+        var fileStream = File.Create(@$"{directory.FullName}\{Guid.NewGuid()}.png");
         fileStream.Write(item.ItemImage);
         fileStream.Close();
     }    
