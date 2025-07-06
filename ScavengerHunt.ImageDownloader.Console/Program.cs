@@ -46,7 +46,7 @@ foreach (var player in players)
     logger.LogInformation("Downloading images from player ({playerName})", player.Name);
 
     // create directory for player
-    var directory = Directory.CreateDirectory(@$"{Directory.GetCurrentDirectory()}\{player.Name}");
+    var directory = Directory.CreateDirectory(@$"{Directory.GetCurrentDirectory()}\Images\{player.Name}");
 
     foreach (var item in player.PlayerToItems)
     {
