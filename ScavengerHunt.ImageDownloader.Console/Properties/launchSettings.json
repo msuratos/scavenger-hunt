@@ -1,0 +1,7 @@
+{
+  "profiles": {
+    "ScavengerHunt.ImageDownloader.Console": {
+      "commandName": "Project"
+    }
+  }
+}
